@@ -1,5 +1,4 @@
-import getUserFromID from "./getData/getGJUserInfo20"
-import getCommentsFromPlayerID from "./getData/getGJAccountComments"
-import Client from "./util/client"
+import getCommentsFromPlayerID from "./getData/getGJAccountComments";
+import Client from "./structures/client";
 
-export default { getUserFromID, Client, getCommentsFromPlayerID }
+export default { Client, getCommentsFromPlayerID };
