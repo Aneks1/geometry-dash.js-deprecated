@@ -1,8 +1,8 @@
-import { UserIconData, UserInfo, UserSocialData, UserStats } from "../../types";
+import { UserIconData, UserData, UserSocialData, UserStats } from "../../types";
 import formatResponse from "../util/formatResponse";
 
-export default class User {
-    public info: UserInfo;
+export = class User {
+    public data: UserData;
     public stats: UserStats;
     public social: UserSocialData;
     public modLevel: "none" | "mod" | "elder";
@@ -15,9 +15,9 @@ export default class User {
     constructor(rawData: string) {
         const data = formatResponse(rawData.split(":"));
 
-        this.info = {
-            accountID: data[16],
-            playerID: data[2],
+        this.data = {
+            accountId: data[16],
+            playerId: data[2],
             username: data[1],
         };
         this.social = {
@@ -40,16 +40,32 @@ export default class User {
             playerColor: +data[10],
             secondaryPlayerColor: +data[11],
 
-            iconType: +data[24],
+            iconType:
+                data[24] == "0"
+                    ? "cube"
+                    : data[14] == "1"
+                    ? "ship"
+                    : data[14] == "2"
+                    ? "ball"
+                    : data[14] == "3"
+                    ? "ufo"
+                    : data[14] == "4"
+                    ? "wave"
+                    : data[14] == "5"
+                    ? "robot"
+                    : data[24] == "6"
+                    ? "spider"
+                    : "cube",
+
             cube: +data[21],
             ship: +data[22],
             ball: +data[23],
-            bird: +data[24],
+            ufo: +data[24],
             wave: +data[25],
             robot: +data[26],
+            spider: +data[43],
             streak: +data[27],
             glow: +data[28],
-            spider: +data[43],
             explosion: +data[48],
         };
 
@@ -58,4 +74,4 @@ export default class User {
         this.commentHistoryState = +data[50] == 0 ? "all" : +data[50] == 1 ? "friends" : "off";
         this.isRegistered = !!+data[29];
     }
-}
+};

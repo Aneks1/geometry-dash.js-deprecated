@@ -5,14 +5,17 @@ import params from "../util/params";
 import uuid from "../util/uuid";
 import User from "../structures/user";
 import { LoginParameters, PostCommentParameters } from "../../types";
+import UserCommentManager from "../managers/user-comments";
 
 const encryptor = new Encryptor();
 
 class Client {
-    private username: string | null = null;
-    private accountID: string | null = null;
-    private gjp: string | null = null;
+    public username: string | null = null;
+    public accountID: string | null = null;
+    public gjp: string | null = null;
+
     public user: User | null = null;
+    public comments: UserCommentManager | null = null;
 
     public async login({ username, password }: LoginParameters) {
         const data = await gjRequest("accounts/loginGJAccount", {
@@ -36,7 +39,15 @@ class Client {
 
         this.user = new User(userData);
 
-        return data;
+        const commentData = await gjRequest("getGJCommentHistory", {
+            secret: params.secrets.common,
+            page: 0,
+            mode: 0,
+            userID: this.user.data.playerId,
+        });
+        console.log(commentData);
+        this.comments = new UserCommentManager(this, commentData, 0);
+        return this;
     }
 
     public async postLevelComment({ id, comment, percent = 0 }: PostCommentParameters) {
@@ -87,4 +98,4 @@ class Client {
     }
 }
 
-export default Client;
+export = Client;

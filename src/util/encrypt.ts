@@ -1,5 +1,10 @@
+import sha1 from "sha1";
+
 class Encryptor {
     // encryptor is done and its perfect
+    public chk(str: string, key: number, salt: string) {
+        this.base64.encrypt(this.xor.encrypt(sha1(str + salt), key));
+    }
 
     public xor = {
         encrypt: function (str: string, key: number) {
@@ -33,4 +38,4 @@ class Encryptor {
     };
 }
 
-export default Encryptor;
+export = Encryptor;
