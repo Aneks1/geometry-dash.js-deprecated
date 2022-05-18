@@ -1,31 +1,34 @@
 import formatResponse from "../util/formatResponse";
 import Comment from "../structures/comment";
-import Author from "../structures/author";
 import params from "../util/params";
 import gjRequest from "../util/gjRequest";
 import Client from "../structures/client";
+import Encryptor from "../util/encrypt";
 
-export = class UserCommentManager {
+export default class UserCommentManager {
     private rawCommentData!: Record<string, string>[];
-    private rawUserData!: (Record<string, string> | null)[];
 
     constructor(private client: Client, data: string, public page: number) {
         const commentsData = data.split("|");
 
         this.rawCommentData = commentsData.map(e => e.split(":")[0]).map(e => formatResponse(e.split("~")));
-        this.rawUserData = commentsData.map(e => e.split(":")[1]).map(e => (e ? formatResponse(e.split("~")) : null));
     }
 
-    public get(id: string) {
+    public get(id: string): Comment {
         const index = this.rawCommentData.findIndex(e => e[6] == id);
-        const comment = this.rawCommentData[index],
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            author = this.rawUserData[index]!;
+        const comment = this.rawCommentData[index];
 
-        return {
-            comment: new Comment(comment),
-            author: new Author(author),
-        };
+        return new Comment(comment);
+    }
+
+    public async create(content: string): Promise<void> {
+        const commentText = new Encryptor().base64.encrypt(content).replace(/\+/g, "-").replace(/\//g, "_");
+        await gjRequest("uploadGJAccComment20", {
+            secret: params.secrets.common,
+            gjp: this.client.gjp,
+            comment: commentText,
+            accountID: this.client.user?.data.accountId,
+        });
     }
 
     public async fetchNextPage(): Promise<UserCommentManager | null> {
@@ -49,4 +52,14 @@ export = class UserCommentManager {
 
         return commentData ? new UserCommentManager(this.client, commentData, page) : null;
     }
-};
+
+    public async delete(id: string): Promise<void> {
+        const res = await gjRequest("deleteAccComment20", {
+            secret: params.secrets.common,
+            gjp: this.client.gjp,
+            commentID: id,
+            accountID: this.client.user?.data.accountId,
+        });
+        if (res == -1) throw new Error("Failed to delete comment");
+    }
+}

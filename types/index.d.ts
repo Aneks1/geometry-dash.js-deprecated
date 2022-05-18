@@ -36,7 +36,6 @@ export class Level {
     public downloads: number;
     public usesOfficialSong: boolean;
     public likes: number;
-    public dislikes: number;
     public length: LevelLength;
     public stars: number;
     public starsRequested: number;
@@ -59,8 +58,8 @@ export class Comment {
     public id: string;
     public isSpam: boolean;
     public postedAt: PostedAtString;
-    public percent: number;
-    public modBadge: UserModBadge;
+    public percent: number | null;
+    public modBadge: UserModBadge | null;
     public modChatColor: RGBColor | null;
 }
 
@@ -78,9 +77,11 @@ export interface PostCommentParameters {
 export interface LevelComment {
     comment: Comment;
     author: Author;
-    level: {
-        fetch: () => Promise<Level>;
-    };
+    level:
+        | {
+              fetch: () => Promise<Level>;
+          }
+        | Level;
 }
 
 export interface UserIconData {

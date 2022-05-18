@@ -7,14 +7,17 @@ import gjRequest from "../util/gjRequest";
 import params from "../util/params";
 import Level from "../structures/level";
 
-export = class CommentManager {
+export default class CommentManager {
     private rawCommentData!: Record<string, string>[];
     private rawUserData!: (Record<string, string> | null)[];
 
-    constructor(private client: Client, rawData: string, private page: number) {
+    constructor(private client: Client, rawData: string, private page: number, id?: string) {
         const data = rawData.split("|");
 
-        this.rawCommentData = data.map(e => e.split(":")[0]).map(e => formatResponse(e.split("~")));
+        this.rawCommentData = data
+            .map(e => e.split(":")[0])
+            .map(e => formatResponse(e.split("~")))
+            .map(e => (id ? ((e[1] = id), e) : e));
         this.rawUserData = data.map(e => e.split(":")[1]).map(e => (e ? formatResponse(e.split("~")) : null));
     }
 
@@ -24,19 +27,24 @@ export = class CommentManager {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             author = this.rawUserData[index]!;
 
-        return {
+        const data: { comment: Comment; author: Author } & ({ level: { fetch: () => Promise<Level> } } | { level: Level }) = {
             comment: new Comment(comment),
             author: new Author(author),
             level: {
                 fetch: async () => {
-                    const data = await gjRequest("downloadGJLevel22", {
+                    const res = await gjRequest("downloadGJLevel22", {
                         secret: params.secrets.common,
-                        levelID: comment[6],
+                        levelID: comment[1],
                     });
-                    return new Level(this.client, formatResponse(data.split("~")));
+
+                    const lvl = new Level(this.client, formatResponse(res.split(":")));
+                    data.level = lvl;
+                    return lvl;
                 },
             },
         };
+
+        return data;
     }
 
     public async fetchNextPage(): Promise<CommentManager | null> {
@@ -60,4 +68,13 @@ export = class CommentManager {
 
         return commentData ? new CommentManager(this.client, commentData, page) : null;
     }
-};
+}
+
+(async () => {
+    const client = new Client();
+    await client.login({ username: "GDBagi", password: "leorafa107" });
+    const commeent = client.comments?.get("36676157");
+    await (commeent?.level as { fetch: () => Promise<Level> }).fetch();
+    await (commeent?.level as Level).fetchComments();
+    console.log((commeent?.level as Level).comments?.get("38423182"));
+})();

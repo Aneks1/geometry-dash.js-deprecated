@@ -6,6 +6,7 @@ import uuid from "../util/uuid";
 import User from "../structures/user";
 import { LoginParameters, PostCommentParameters } from "../../types";
 import UserCommentManager from "../managers/user-comments";
+import CommentManager from "../managers/level-comments";
 
 const encryptor = new Encryptor();
 
@@ -15,7 +16,7 @@ class Client {
     public gjp: string | null = null;
 
     public user: User | null = null;
-    public comments: UserCommentManager | null = null;
+    public comments: CommentManager | null = null;
 
     public async login({ username, password }: LoginParameters) {
         const data = await gjRequest("accounts/loginGJAccount", {
@@ -45,8 +46,8 @@ class Client {
             mode: 0,
             userID: this.user.data.playerId,
         });
-        console.log(commentData);
-        this.comments = new UserCommentManager(this, commentData, 0);
+
+        this.comments = new CommentManager(this, commentData, 0);
         return this;
     }
 

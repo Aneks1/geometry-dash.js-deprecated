@@ -6,7 +6,7 @@ import Client from "./client";
 
 const encryptor = new Encryptor();
 
-export = class Level {
+export default class Level {
     public id: string;
     public name: string;
     public description: string;
@@ -18,7 +18,6 @@ export = class Level {
     public downloads: number;
     public usesOfficialSong: boolean;
     public likes: number;
-    public dislikes: number;
     public length: "tiny" | "short" | "medium" | "long" | "xl";
     public stars: number;
     public starsRequested: number;
@@ -30,8 +29,14 @@ export = class Level {
     public isEpic: boolean;
     public isGauntlet: boolean;
     public objectsAmount: number;
+    public hasLDM: boolean;
+    public comments: CommentManager | null = null;
 
-    constructor(private client: Client, data: Record<string, string>) {
+    #client: Client;
+
+    constructor(client: Client, data: Record<string, string>) {
+        console.log(data);
+        this.#client = client;
         this.id = data[1];
         this.name = data[2];
         this.description = encryptor.base64.decrypt(data[3]);
@@ -52,46 +57,47 @@ export = class Level {
                 : data[15] == "4"
                 ? "xl"
                 : "tiny";
-        this.dislikes = +data[16];
+
+        this.hasLDM = !!+data[40];
         this.isDemon = !!data[17];
         this.stars = +data[18];
-        this.copiedFrom = data[30] ? data[30] : null;
-        this.isTwoPlayer = !!data[31];
+        this.copiedFrom = +data[30] ? data[30] : null;
+        this.isTwoPlayer = !!+data[31];
         this.customSongId = data[35] ? data[35] : null;
         this.coins = +data[37];
-        this.coinsVerified = data[38] ? true : false;
+        this.coinsVerified = !!+data[38];
         this.starsRequested = +data[39];
-        this.isEpic = !!data[42];
+        this.isEpic = !!+data[42];
         this.isGauntlet = !!data[44];
         this.objectsAmount = +data[45];
 
         if (this.isDemon) {
             this.demonLevel =
-                data[46] == "3"
+                data[43] == "3"
                     ? "easy"
-                    : data[46] == "4"
+                    : data[43] == "4"
                     ? "medium"
-                    : data[46] == "0"
+                    : data[43] == "0"
                     ? "hard"
-                    : data[46] == "5"
+                    : data[43] == "5"
                     ? "insane"
-                    : data[46] == "6"
+                    : data[43] == "6"
                     ? "extreme"
                     : null;
             this.difficulty = "demon";
         } else {
             this.difficulty =
-                data[47] == "0"
+                data[9] == "0"
                     ? "unknown"
-                    : data[47] == "10"
+                    : data[9] == "10"
                     ? "easy"
-                    : data[47] == "20"
+                    : data[9] == "20"
                     ? "normal"
-                    : data[47] == "30"
+                    : data[9] == "30"
                     ? "hard"
-                    : data[47] == "40"
+                    : data[9] == "40"
                     ? "harder"
-                    : data[47] == "50"
+                    : data[9] == "50"
                     ? "insane"
                     : "unknown";
 
@@ -131,16 +137,14 @@ export = class Level {
             levelID: this.id,
             percent: percentage,
             comment,
-            userName: this.client.username,
-            gjp: this.client.gjp,
-            chk: encryptor.chk(this.client.username + comment + this.id.toString() + percentage.toString(), 29481, "0xPT6iUrtws0J"),
+            userName: this.#client.username,
+            gjp: this.#client.gjp,
+            chk: encryptor.chk(this.#client.username + comment + this.id.toString() + percentage.toString(), 29481, "0xPT6iUrtws0J"),
         });
 
         if (res == -1) throw new Error("Failed to post comment");
         else return String(res);
     }
-
-    public comments: CommentManager | null = null;
 
     public async fetchComments(): Promise<CommentManager> {
         const res = await gjRequest("getGJComments21", {
@@ -149,11 +153,12 @@ export = class Level {
             page: 0,
         });
 
+        console.log(res);
         if (res == -1) throw new Error("Failed to fetch comments");
         else {
-            const manager = new CommentManager(this.client, res, 0);
+            const manager = new CommentManager(this.#client, res, 0, this.id);
             this.comments = manager;
             return manager;
         }
     }
-};
+}

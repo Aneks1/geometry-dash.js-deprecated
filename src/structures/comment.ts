@@ -10,8 +10,8 @@ export = class Comment {
     public id: string;
     public isSpam: boolean;
     public postedAt: `${string} ago`;
-    public percent: number;
-    public modBadge: "none" | "mod" | "elder";
+    public percent: number | null;
+    public modBadge: "none" | "mod" | "elder" | null;
     public modChatColor: readonly [number, number, number] | null;
 
     constructor(data: Record<string, string>) {
@@ -22,8 +22,8 @@ export = class Comment {
         this.id = data[6];
         this.isSpam = !!data[7];
         this.postedAt = `${data[9]} ago`;
-        this.percent = +data[10];
-        this.modBadge = data[11] === "1" ? "mod" : data[11] === "2" ? "elder" : "none";
+        this.percent = data[10] ? +data[10] : null;
+        this.modBadge = !data[11] ? null : data[11] === "1" ? "mod" : data[11] === "2" ? "elder" : "none";
         const modColor = data[12]?.split(",");
         modColor ? (this.modChatColor = [+modColor[0], +modColor[1], +modColor[2]]) : (this.modChatColor = null);
     }
