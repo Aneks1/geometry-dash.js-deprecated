@@ -38,7 +38,7 @@ class Client {
             targetAccountID: this.accountID,
         });
 
-        this.user = new User(userData);
+        this.user = new User(this, userData);
 
         const commentData = await gjRequest("getGJCommentHistory", {
             secret: params.secrets.common,

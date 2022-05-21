@@ -22,7 +22,7 @@ export default class UserCommentManager {
     }
 
     public async create(content: string): Promise<void> {
-        const commentText = new Encryptor().base64.encrypt(content).replace(/\+/g, "-").replace(/\//g, "_");
+        const commentText = new Encryptor().base64.encrypt(content);
         await gjRequest("uploadGJAccComment20", {
             secret: params.secrets.common,
             gjp: this.client.gjp,

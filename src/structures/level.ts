@@ -131,7 +131,7 @@ export default class Level {
         if (comment.includes("\n")) throw new Error("Comment cannot contain newlines");
         if (percentage > 100 || percentage < 0) throw new Error("Percentage must be between 0 and 100");
 
-        comment = encryptor.base64.encrypt(comment).replace(/\+/g, "-").replace(/\//g, "_");
+        comment = encryptor.base64.encrypt(comment);
         const res = await gjRequest("uploadGJComment21", {
             secret: params.secrets.common,
             levelID: this.id,
@@ -153,7 +153,6 @@ export default class Level {
             page: 0,
         });
 
-        console.log(res);
         if (res == -1) throw new Error("Failed to fetch comments");
         else {
             const manager = new CommentManager(this.#client, res, 0, this.id);

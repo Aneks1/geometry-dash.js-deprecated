@@ -69,12 +69,3 @@ export default class CommentManager {
         return commentData ? new CommentManager(this.client, commentData, page) : null;
     }
 }
-
-(async () => {
-    const client = new Client();
-    await client.login({ username: "GDBagi", password: "leorafa107" });
-    const commeent = client.comments?.get("36676157");
-    await (commeent?.level as { fetch: () => Promise<Level> }).fetch();
-    await (commeent?.level as Level).fetchComments();
-    console.log((commeent?.level as Level).comments?.get("38423182"));
-})();

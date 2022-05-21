@@ -1,6 +1,13 @@
 import { UserIconData, UserData, UserSocialData, UserStats } from "../../types";
+import CommentManager from "../managers/level-comments";
+import UserCommentManager from "../managers/user-comments";
+import Encryptor from "../util/encrypt";
 import formatResponse from "../util/formatResponse";
+import gjRequest from "../util/gjRequest";
+import params from "../util/params";
+import Client from "./client";
 
+const encryptor = new Encryptor();
 export = class User {
     public data: UserData;
     public stats: UserStats;
@@ -11,8 +18,10 @@ export = class User {
     public friendRequestState: "all" | "off";
     public isRegistered: boolean;
     public icon: UserIconData;
+    #client: Client;
 
-    constructor(rawData: string) {
+    constructor(client: Client, rawData: string) {
+        this.#client = client;
         const data = formatResponse(rawData.split(":"));
 
         this.data = {
@@ -73,5 +82,59 @@ export = class User {
         this.friendRequestState = +data[19] == 0 ? "all" : "off";
         this.commentHistoryState = +data[50] == 0 ? "all" : +data[50] == 1 ? "friends" : "off";
         this.isRegistered = !!+data[29];
+    }
+
+    public async sendFriendRequest(message?: string): Promise<boolean> {
+        try {
+            await gjRequest("uploadFriendRequest20", {
+                secret: params.secrets.common,
+                gjp: this.#client.gjp,
+                toAccountID: this.data.accountId,
+                accountID: this.#client.user?.data.accountId,
+                comment: message ? encryptor.base64.encrypt(message) : "",
+            });
+
+            return true;
+        } catch {
+            return false;
+        }
+    }
+
+    public async block(): Promise<void> {
+        await gjRequest("blockGJUser20", {
+            secret: params.secrets.common,
+            gjp: this.#client.gjp,
+            accountID: this.#client.user?.data.accountId,
+            targetAccountID: this.data.accountId,
+        });
+    }
+
+    public async unblock(): Promise<void> {
+        await gjRequest("unblockGJUser20", {
+            secret: params.secrets.common,
+            gjp: this.#client.gjp,
+            accountID: this.#client.user?.data.accountId,
+            targetAccountID: this.data.accountId,
+        });
+    }
+
+    public async fetchAccountComments(): Promise<UserCommentManager> {
+        const res = await gjRequest("getGJAccountComments20", {
+            secret: params.secrets.common,
+            page: 0,
+            accountID: this.data.accountId,
+        });
+
+        return new UserCommentManager(this.#client, res, 0);
+    }
+
+    public async fetchComments(): Promise<CommentManager> {
+        const res = await gjRequest("getGJCommentHistory", {
+            secret: params.secrets.common,
+            page: 0,
+            userID: this.data.playerId,
+        });
+
+        return new CommentManager(this.#client, res, 0);
     }
 };
