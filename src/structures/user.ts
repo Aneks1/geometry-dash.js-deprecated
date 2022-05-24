@@ -16,9 +16,9 @@ export = class User {
     public stats: UserStats;
     public social: UserSocialData;
     public modLevel: "none" | "mod" | "elder";
-    public messageState: "all" | "friends" | "off";
-    public commentHistoryState: "all" | "friends" | "off";
-    public friendRequestState: "all" | "off";
+    public messagesEnabled: "all" | "friends" | "off";
+    public commentHistoryEnabled: "all" | "friends" | "off";
+    public friendRequestEnabled: boolean;
     public isRegistered: boolean;
     public icon: UserIconData;
     #client: Client;
@@ -81,9 +81,9 @@ export = class User {
             explosion: +data[48],
         };
 
-        this.messageState = +data[18] == 0 ? "all" : +data[18] == 1 ? "friends" : "off";
-        this.friendRequestState = +data[19] == 0 ? "all" : "off";
-        this.commentHistoryState = +data[50] == 0 ? "all" : +data[50] == 1 ? "friends" : "off";
+        this.messagesEnabled = +data[18] == 0 ? "all" : +data[18] == 1 ? "friends" : "off";
+        this.friendRequestEnabled = +data[19] == 0 ? true : false;
+        this.commentHistoryEnabled = +data[50] == 0 ? "all" : +data[50] == 1 ? "friends" : "off";
         this.isRegistered = !!+data[29];
     }
 
