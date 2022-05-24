@@ -1,0 +1,27 @@
+{
+    "name": "geometry-dash",
+    "version": "1.0.0",
+    "description": "",
+    "main": "dist/src/index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@types/node": "^17.0.25",
+        "@types/sha1": "^1.1.3",
+        "axios": "^0.26.1",
+        "sha1": "^1.1.1"
+    },
+    "types": "types/index.d.ts",
+    "prettier": {
+        "bracketSpacing": true,
+        "printWidth": 140,
+        "tabWidth": 4,
+        "arrowParens": "avoid",
+        "singleQuote": false,
+        "trailingComma": "es5"
+    }
+}
