@@ -63,7 +63,7 @@ export default class CommentManager {
             secret: params.secrets.common,
             page,
             mode: 0,
-            userID: this.client.user?.data.playerId,
+            userID: this.client.user?.playerId,
         });
 
         return commentData ? new CommentManager(this.client, commentData, page) : null;

@@ -1,4 +1,4 @@
-import { UserIconData, UserData, UserSocialData, UserStats } from "../../types";
+import { UserIconData, UserSocialData, UserStats } from "../../types";
 import CommentManager from "../managers/level-comments";
 import UserCommentManager from "../managers/user-comments";
 import Encryptor from "../util/encrypt";
@@ -8,8 +8,11 @@ import params from "../util/params";
 import Client from "./client";
 
 const encryptor = new Encryptor();
+
 export = class User {
-    public data: UserData;
+    public accountId: string;
+    public playerId: string;
+    public username: string;
     public stats: UserStats;
     public social: UserSocialData;
     public modLevel: "none" | "mod" | "elder";
@@ -24,16 +27,16 @@ export = class User {
         this.#client = client;
         const data = formatResponse(rawData.split(":"));
 
-        this.data = {
-            accountId: data[16],
-            playerId: data[2],
-            username: data[1],
-        };
+        this.accountId = data[16];
+        this.playerId = data[2];
+        this.username = data[1];
+
         this.social = {
             twitch: data[45] ? `https://twitch.tv/${data[45]}` : null,
             youtube: data[20] ? `https://youtube.com/${data[20]}` : null,
             twitter: data[44] ? `https://twitter.com/${data[44]}` : null,
         };
+
         this.stats = {
             coins: +data[13],
             creatorPoints: +data[8],
@@ -89,8 +92,8 @@ export = class User {
             await gjRequest("uploadFriendRequest20", {
                 secret: params.secrets.common,
                 gjp: this.#client.gjp,
-                toAccountID: this.data.accountId,
-                accountID: this.#client.user?.data.accountId,
+                toAccountID: this.accountId,
+                accountID: this.#client.user?.accountId,
                 comment: message ? encryptor.base64.encrypt(message) : "",
             });
 
@@ -104,8 +107,8 @@ export = class User {
         await gjRequest("blockGJUser20", {
             secret: params.secrets.common,
             gjp: this.#client.gjp,
-            accountID: this.#client.user?.data.accountId,
-            targetAccountID: this.data.accountId,
+            accountID: this.#client.user?.accountId,
+            targetAccountID: this.accountId,
         });
     }
 
@@ -113,8 +116,8 @@ export = class User {
         await gjRequest("unblockGJUser20", {
             secret: params.secrets.common,
             gjp: this.#client.gjp,
-            accountID: this.#client.user?.data.accountId,
-            targetAccountID: this.data.accountId,
+            accountID: this.#client.user?.accountId,
+            targetAccountID: this.accountId,
         });
     }
 
@@ -122,7 +125,7 @@ export = class User {
         const res = await gjRequest("getGJAccountComments20", {
             secret: params.secrets.common,
             page: 0,
-            accountID: this.data.accountId,
+            accountID: this.accountId,
         });
 
         return new UserCommentManager(this.#client, res, 0);
@@ -132,9 +135,22 @@ export = class User {
         const res = await gjRequest("getGJCommentHistory", {
             secret: params.secrets.common,
             page: 0,
-            userID: this.data.playerId,
+            userID: this.playerId,
         });
 
         return new CommentManager(this.#client, res, 0);
+    }
+
+    public async sendMessage(subject: string, message: string): Promise<boolean> {
+        const res = await gjRequest("uploadGJMessage20", {
+            secret: params.secrets.common,
+            gjp: this.#client.gjp,
+            toAccountID: this.accountId,
+            accountID: this.#client.user?.accountId,
+            subject: encryptor.base64.encrypt(subject),
+            message: encryptor.base64.encrypt(message),
+        });
+
+        return res == 1;
     }
 };

@@ -27,7 +27,7 @@ export default class UserCommentManager {
             secret: params.secrets.common,
             gjp: this.client.gjp,
             comment: commentText,
-            accountID: this.client.user?.data.accountId,
+            accountID: this.client.user?.accountId,
         });
     }
 
@@ -36,7 +36,7 @@ export default class UserCommentManager {
             secret: params.secrets.common,
             page: this.page + 1,
             mode: 0,
-            userID: this.client.user?.data.playerId,
+            userID: this.client.user?.playerId,
         });
 
         return commentData ? new UserCommentManager(this.client, commentData, this.page + 1) : null;
@@ -47,7 +47,7 @@ export default class UserCommentManager {
             secret: params.secrets.common,
             page,
             mode: 0,
-            userID: this.client.user?.data.playerId,
+            userID: this.client.user?.playerId,
         });
 
         return commentData ? new UserCommentManager(this.client, commentData, page) : null;
@@ -58,7 +58,7 @@ export default class UserCommentManager {
             secret: params.secrets.common,
             gjp: this.client.gjp,
             commentID: id,
-            accountID: this.client.user?.data.accountId,
+            accountID: this.client.user?.accountId,
         });
         if (res == -1) throw new Error("Failed to delete comment");
     }
