@@ -1,10 +1,23 @@
-import Client from "./structures/client";
-import Author from "./structures/author";
-import Comment from "./structures/comment";
-import Level from "./structures/level";
-import User from "./structures/user";
-
 import CommentManager from "./managers/level-comments";
 import UserCommentManager from "./managers/user-comments";
+import SettingsManager from "./managers/user-settings";
 
-export = { Client, Author, Comment, Level, User, CommentManager, UserCommentManager };
+import Author from "./structures/author";
+import ClientUser from "./structures/client-user";
+import Client from "./structures/client";
+import Comment from "./structures/comment";
+import Level from "./structures/level";
+import User from "./structures/user/base-user";
+
+export = {
+    CommentManager,
+    UserCommentManager,
+    SettingsManager,
+
+    Author,
+    ClientUser,
+    Client,
+    Comment,
+    Level,
+    User,
+};

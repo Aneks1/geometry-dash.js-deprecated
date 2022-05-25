@@ -5,6 +5,7 @@ import { UserSocialData } from "../../types";
 
 export default class SettingsManager {
     #client: Client;
+
     constructor(client: Client) {
         this.#client = client;
     }

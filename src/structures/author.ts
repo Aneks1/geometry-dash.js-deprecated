@@ -1,4 +1,4 @@
-export = class Author {
+export default class Author {
     public username: string;
     public icon: string;
     public playerColor: string;
@@ -32,4 +32,4 @@ export = class Author {
         this.hasGlow = data[15] == "0" ? false : true;
         this.accountId = data[16];
     }
-};
+}

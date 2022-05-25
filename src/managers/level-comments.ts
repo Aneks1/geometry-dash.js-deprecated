@@ -55,7 +55,7 @@ export default class CommentManager {
             levelID: this.rawCommentData[0][1],
         });
 
-        return commentData ? new CommentManager(this.client, commentData, this.page + 1) : null;
+        return commentData == -1 ? new CommentManager(this.client, commentData, this.page + 1) : null;
     }
 
     public async fetchPage(page: number): Promise<CommentManager | null> {
@@ -66,6 +66,6 @@ export default class CommentManager {
             userID: this.client.user?.playerId,
         });
 
-        return commentData ? new CommentManager(this.client, commentData, page) : null;
+        return commentData == -1 ? new CommentManager(this.client, commentData, page) : null;
     }
 }
