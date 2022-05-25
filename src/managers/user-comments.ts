@@ -39,7 +39,7 @@ export default class UserCommentManager {
             userID: this.client.user?.playerId,
         });
 
-        return commentData ? new UserCommentManager(this.client, commentData, this.page + 1) : null;
+        return commentData == -1 ? null : new UserCommentManager(this.client, commentData, this.page + 1);
     }
 
     public async fetchPage(page: number): Promise<UserCommentManager | null> {
@@ -49,8 +49,8 @@ export default class UserCommentManager {
             mode: 0,
             userID: this.client.user?.playerId,
         });
-
-        return commentData ? new UserCommentManager(this.client, commentData, page) : null;
+        console.log(commentData);
+        return commentData == -1 ? null : new UserCommentManager(this.client, commentData, page);
     }
 
     public async delete(id: string): Promise<void> {
