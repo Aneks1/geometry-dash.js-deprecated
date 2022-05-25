@@ -50,4 +50,4 @@ class Client {
     }
 }
 
-export = Client;
+export default Client;

@@ -2,7 +2,7 @@ import Encryptor from "../util/encrypt";
 import gjRequest from "../util/gjRequest";
 import params from "../util/params";
 
-export = class Comment {
+export default class Comment {
     public levelId: string;
     public content: string;
     public playerId: string;
@@ -49,4 +49,4 @@ export = class Comment {
 
         return this;
     }
-};
+}
