@@ -3,7 +3,7 @@ import Encryptor from "../util/encrypt";
 import gjRequest from "../util/gjRequest";
 import params from "../util/params";
 import Client from "./client";
-import User from "./user";
+import User from "./user/base-user";
 
 const encryptor = new Encryptor();
 
@@ -12,10 +12,10 @@ export default class ClientUser extends User {
     public settings: SettingsManager;
 
     constructor(client: Client, data: string) {
-        super(client, data);
+        super(data);
         this.#client = client;
 
-        this.settings = new SettingsManager(this.#client);
+        this.settings = new SettingsManager(client);
     }
 
     public async postProfileComment(comment: string) {
