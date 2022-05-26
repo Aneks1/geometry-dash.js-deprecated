@@ -1,4 +1,16 @@
-class Encryptor { // encryptor is done and its perfect
+import sha1 from 'sha1';
+
+class Encryptor {
+
+    public chk(str: string, salt: string, key: number) {
+
+        this.xor.encrypt(
+            
+            sha1(str + salt), key
+            
+        )
+
+    }
 
     public xor = {
 

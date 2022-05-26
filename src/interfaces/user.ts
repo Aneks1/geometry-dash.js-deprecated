@@ -1,3 +1,5 @@
+import Icons from './icons'
+
 interface User {
 
     readonly info: {
@@ -27,6 +29,8 @@ interface User {
         readonly twitch: string | null
 
     }
+
+    readonly icons: Icons
 
 }
 

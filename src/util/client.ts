@@ -1,10 +1,9 @@
 import gjRequest from "./gjRequest"
-import sha1 from 'sha1'
 import Encryptor from './encrypt'
-import params from "./params.json"
+import params from "./params"
 import uuid from "./uuid"
 import User from "../interfaces/user"
-import getUserFromID from "../getData/getGJUserInfo20"
+import getUserFromID from "../endpoints/getGJUserInfo20"
 
 const encryptor = new Encryptor()
 
@@ -30,22 +29,22 @@ class Client {
             }
         )
 
-        if(data == -1) {
+        if(data == ["-1"]) {
 
             throw new Error("Invalid login credentials! Check that your username and password are correct.\n")
 
         } 
 
-        else if(data == 12) {
+        else if(data == ["12"]) {
 
-            throw new Error("This account is baneed from the Geometry Dash servers! Consider not cheating again :c\n")
+            throw new Error("This account is banned from the Geometry Dash servers! Consider not cheating again :c\n")
 
         }
         
         else {
 
             this.username = username
-            this.accountID = data.split(',')[0]
+            this.accountID = data[0].split(',')[0]
             this.gjp = encryptor.xor.encrypt(password, 37526)
 
             this.profile = await getUserFromID({ id: this.accountID })
@@ -72,9 +71,7 @@ class Client {
 
         comment = encryptor.base64.encrypt(comment)
 
-        const str = sha1(this.username + comment + id + percent.toString() + "0xPT6iUrtws0J")
-
-        const encrypted = encryptor.xor.encrypt(str, 29481)
+        const chk = encryptor.chk(this.username + comment + id + percent.toString(), "0xPT6iUrtws0J", 29481)
 
         const data = await gjRequest('uploadGJComment21',
 
@@ -87,7 +84,7 @@ class Client {
                 comment: comment,
                 levelID: id,
                 percent: percent.toString(),
-                chk: encrypted
+                chk: chk
 
             }
         )

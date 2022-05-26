@@ -1,13 +1,15 @@
 import axios from "axios"
-import { baseUrl } from './params.json'
+import params from './params'
 
 axios.defaults.headers.common["User-Agent"] = "";
 
-async function gjRequest(endpoint: string, params: { secret: string, [key : string] : any }) {
+async function gjRequest(endpoint: string, requestParams: { secret: string, [key : string] : any }): Promise<string[]> {
 
-    const res = await axios.post(`${baseUrl}${endpoint}.php`, new URLSearchParams(params))
+    const res = await axios.post(`${params.baseUrl}${endpoint}.php`, new URLSearchParams(requestParams))
 
-    return res.data
+    const dataList = res.data.toString().split("|")
+
+    return dataList
 
 }
 
