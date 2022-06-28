@@ -31,3 +31,27 @@ await me.login({ username: 'Aneks', password: 'UmGnomoEstavaAndandoEncimaDoAsfal
 await me.postProfileComment({ comment: 'Colon is a Furry' })
 await me.postLevelComment({ id: '75206202', comment: 'This is too easy', percent: 100 })
 ```
+
+### Getting Someone's Comments
+
+```ts
+const comments = await getCommentsFromPlayerID({ playerID: '1234567' }) // Add page: "page number" for specific page. Default is 0
+```
+
+### Relationships
+
+```ts
+const friends = me.relationships.friends
+const blocked = me.relationships.blockedUsers
+```
+
+#### Friend Requests
+
+```ts
+const friendRequests = me.relationships.friendRequests
+const robtopFriendRequest = friendRequests.filter((rqst: FriendRequest) => { return rqst.user.username == 'RobTop' })
+const nexusFriendRequest = friendRequests.filter((rqst: FriendRequest) => { return rqst.user.username == 'Nexus' })
+
+if(nexusFriendRequest) await nexusFriendRequest.accept()
+if(robtopFriendRequest) await robtopFriendRequest.accept()
+```

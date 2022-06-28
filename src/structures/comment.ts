@@ -1,52 +1,32 @@
-import Encryptor from "../util/encrypt";
-import gjRequest from "../util/gjRequest";
-import params from "../util/params";
+import Player from './Player'
+import encryptor from '../Utils/encryptor'
 
-export = class Comment {
-    public levelId: string;
-    public content: string;
-    public playerId: string;
-    public likes: number;
-    public id: string;
-    public isSpam: boolean;
-    public postedAt: `${string} ago`;
-    public percent: number | null;
-    public modBadge: "none" | "mod" | "elder" | null;
-    public modChatColor: readonly [number, number, number] | null;
 
-    constructor(data: Record<string, string>) {
-        this.levelId = data[1];
-        this.content = new Encryptor().base64.decrypt(data[2]);
-        this.playerId = data[3];
-        this.likes = +data[4];
-        this.id = data[6];
-        this.isSpam = !!data[7];
-        this.postedAt = `${data[9]} ago`;
-        this.percent = data[10] ? +data[10] : null;
-        this.modBadge = !data[11] ? null : data[11] === "1" ? "mod" : data[11] === "2" ? "elder" : "none";
-        const modColor = data[12]?.split(",");
-        modColor ? (this.modChatColor = [+modColor[0], +modColor[1], +modColor[2]]) : (this.modChatColor = null);
+class Comment {
+
+    public readonly comment: Record<string, string>
+    public readonly author: Player
+    public readonly level: string
+
+
+    constructor(commentInfo: Record<string, string>, userInfo: Record<string, string>) {
+
+        this.comment = {
+
+            content: encryptor.base64.decrypt(commentInfo["2"]),
+            likes: commentInfo["4"],
+            date: commentInfo["9"] + " ago",
+            commentID: commentInfo["6"],
+            percent: commentInfo["10"]
+
+        },
+
+        this.author = new Player(userInfo),
+
+        this.level = commentInfo["1"]
+
     }
 
-    public async like(): Promise<this> {
-        await gjRequest("likeGJItem211", {
-            secret: params.secrets.common,
-            itemID: this.id,
-            type: 2,
-            like: 1,
-        });
+}
 
-        return this;
-    }
-
-    public async dislike(): Promise<this> {
-        await gjRequest("likeGJItem211", {
-            secret: params.secrets.common,
-            itemID: this.id,
-            type: 2,
-            like: 0,
-        });
-
-        return this;
-    }
-};
+export default Comment

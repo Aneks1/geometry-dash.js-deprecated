@@ -59,4 +59,5 @@ class Encryptor {
 
 }
 
-export default Encryptor
+const encryptor = new Encryptor()
+export default encryptor

@@ -1,140 +1,46 @@
-import { UserIconData, UserData, UserSocialData, UserStats } from "../../types";
-import CommentManager from "../managers/level-comments";
-import UserCommentManager from "../managers/user-comments";
-import Encryptor from "../util/encrypt";
-import formatResponse from "../util/formatResponse";
-import gjRequest from "../util/gjRequest";
-import params from "../util/params";
-import Client from "./client";
+import Icons from './Icons'
 
-const encryptor = new Encryptor();
-export = class User {
-    public data: UserData;
-    public stats: UserStats;
-    public social: UserSocialData;
-    public modLevel: "none" | "mod" | "elder";
-    public messageState: "all" | "friends" | "off";
-    public commentHistoryState: "all" | "friends" | "off";
-    public friendRequestState: "all" | "off";
-    public isRegistered: boolean;
-    public icon: UserIconData;
-    #client: Client;
+class User {
 
-    constructor(client: Client, rawData: string) {
-        this.#client = client;
-        const data = formatResponse(rawData.split(":"));
+    public readonly info
+    public readonly stats
+    public readonly social
+    public readonly icons: Icons
 
-        this.data = {
-            accountId: data[16],
-            playerId: data[2],
-            username: data[1],
-        };
-        this.social = {
-            twitch: data[45] ? `https://twitch.tv/${data[45]}` : null,
-            youtube: data[20] ? `https://youtube.com/${data[20]}` : null,
-            twitter: data[44] ? `https://twitter.com/${data[44]}` : null,
-        };
+    constructor(userInfo: Record<string, string>) {
+
+        this.info = {
+
+            username: userInfo['1'],
+            playerID: userInfo['2'],
+            accountID: userInfo['16']
+
+        },
+
         this.stats = {
-            coins: +data[13],
-            creatorPoints: +data[8],
-            diamonds: +data[46],
-            demons: +data[4],
-            globalRank: +data[30],
-            stars: +data[3],
-            userCoins: +data[17],
-        };
-        this.modLevel = +data[49] == 0 ? "none" : +data[49] == 1 ? "mod" : "elder";
 
-        this.icon = {
-            playerColor: +data[10],
-            secondaryPlayerColor: +data[11],
+            coins: Number(userInfo['13']),
+            usercoins: Number(userInfo['17']),
+            stars: Number(userInfo['3']),
+            diamonds: Number(userInfo['46']),
+            demons: Number(userInfo['4']),
+            creatorPoints: Number(userInfo['8']),
+            globalRank: Number(userInfo['30'])
 
-            iconType:
-                data[24] == "0"
-                    ? "cube"
-                    : data[14] == "1"
-                    ? "ship"
-                    : data[14] == "2"
-                    ? "ball"
-                    : data[14] == "3"
-                    ? "ufo"
-                    : data[14] == "4"
-                    ? "wave"
-                    : data[14] == "5"
-                    ? "robot"
-                    : data[24] == "6"
-                    ? "spider"
-                    : "cube",
+        },
 
-            cube: +data[21],
-            ship: +data[22],
-            ball: +data[23],
-            ufo: +data[24],
-            wave: +data[25],
-            robot: +data[26],
-            spider: +data[43],
-            streak: +data[27],
-            glow: +data[28],
-            explosion: +data[48],
-        };
+        this.social = {
 
-        this.messageState = +data[18] == 0 ? "all" : +data[18] == 1 ? "friends" : "off";
-        this.friendRequestState = +data[19] == 0 ? "all" : "off";
-        this.commentHistoryState = +data[50] == 0 ? "all" : +data[50] == 1 ? "friends" : "off";
-        this.isRegistered = !!+data[29];
+            youtube: !userInfo['20'] ? null : `https://www.youtube.com/channel/${userInfo[13]}`,
+            twitch: !userInfo['45'] ? null : `https://www.twitch.tv/${userInfo[26]}`,
+            twitter: !userInfo['44'] ? null : `https://twitter.com/${userInfo[27]}`
+
+        },
+
+        this.icons = new Icons(userInfo)
+
     }
 
-    public async sendFriendRequest(message?: string): Promise<boolean> {
-        try {
-            await gjRequest("uploadFriendRequest20", {
-                secret: params.secrets.common,
-                gjp: this.#client.gjp,
-                toAccountID: this.data.accountId,
-                accountID: this.#client.user?.data.accountId,
-                comment: message ? encryptor.base64.encrypt(message) : "",
-            });
+}
 
-            return true;
-        } catch {
-            return false;
-        }
-    }
-
-    public async block(): Promise<void> {
-        await gjRequest("blockGJUser20", {
-            secret: params.secrets.common,
-            gjp: this.#client.gjp,
-            accountID: this.#client.user?.data.accountId,
-            targetAccountID: this.data.accountId,
-        });
-    }
-
-    public async unblock(): Promise<void> {
-        await gjRequest("unblockGJUser20", {
-            secret: params.secrets.common,
-            gjp: this.#client.gjp,
-            accountID: this.#client.user?.data.accountId,
-            targetAccountID: this.data.accountId,
-        });
-    }
-
-    public async fetchAccountComments(): Promise<UserCommentManager> {
-        const res = await gjRequest("getGJAccountComments20", {
-            secret: params.secrets.common,
-            page: 0,
-            accountID: this.data.accountId,
-        });
-
-        return new UserCommentManager(this.#client, res, 0);
-    }
-
-    public async fetchComments(): Promise<CommentManager> {
-        const res = await gjRequest("getGJCommentHistory", {
-            secret: params.secrets.common,
-            page: 0,
-            userID: this.data.playerId,
-        });
-
-        return new CommentManager(this.#client, res, 0);
-    }
-};
+export default User
