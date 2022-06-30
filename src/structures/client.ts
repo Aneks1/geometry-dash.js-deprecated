@@ -24,18 +24,12 @@ class Client {
 
     public async login({ username, password }: { username: string, password: string }) {
 
-        const data = await gjRequest('accounts/loginGJAccount',
-
-            { 
-
-                secret: params.secrets.account,
-                udid: uuid(),
-                userName: username,
-                password: password,
-
-            }
-        )
-
+        const data = await httpClient.post<string>('accounts/loginGJAccount', {
+            secret: params.secrets.account,
+            udid: uuid(),
+            userName: username,
+            password: password,
+        })
 
         if(data[0] == '-1')
             

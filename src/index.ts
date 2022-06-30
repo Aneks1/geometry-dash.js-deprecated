@@ -25,3 +25,10 @@ export default {
     RelationshipsManager
 
 }
+
+    const me = new Client();
+    me.login({ username: 'Tofixts', password: 'sussus' }).then(c => {
+        if(c instanceof Client) {
+            console.log(c.profile)
+        }
+    })
