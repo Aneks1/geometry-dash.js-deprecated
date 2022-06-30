@@ -14,7 +14,7 @@ export class HttpClient {
         return new URL(`${endpoint}.php`, params.baseUrl);
     }
 
-    public async post<T extends string[] | string>(endpoint: string, urlSearchParams? : Record<string, string> & { secret : string }) : Promise<T> {
+    public async post<T extends string[]>(endpoint: string, urlSearchParams? : Record<string, string> & { secret : string }) : Promise<T> {
         const url = HttpClient.baseURLGenerator(endpoint);
         const data = await axios.post(url.toString(), new URLSearchParams(urlSearchParams))
             .then( res =>
@@ -26,12 +26,7 @@ export class HttpClient {
         if(data === -2) {
             throw Error(format(`${endpoint}.php: Got -2 as response (empty list).`))
         }
-        if(data.includes('|')) {
-            //it is a list
-            return data.split('|') as T;
-        }
-        // string response
-        return data as T;
+        return data.split('|') as T;
 
     }
 
