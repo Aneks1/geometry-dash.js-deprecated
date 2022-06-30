@@ -24,7 +24,7 @@ class Client {
 
     public async login({ username, password }: { username: string, password: string }) {
 
-        const data = await httpClient.post<string>('accounts/loginGJAccount', {
+        const data = await httpClient.post<string[]>('accounts/loginGJAccount', {
             secret: params.secrets.account,
             udid: uuid(),
             userName: username,
