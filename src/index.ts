@@ -1,17 +1,17 @@
     
     // [    Endpoints   ] \\
 
-import getUserFromID from "./Endpoints/getGJUserInfo20"
-import getCommentsFromPlayerID from "./Endpoints/getGJAccountComments"
+import getUserFromID from "./endpoints/getGJUserInfo20"
+import getCommentsFromPlayerID from "./endpoints/getGJAccountComments"
 
     // [    Structures    ] \\
     
-import Client from "./Structures/Client"
-import Comment from "./Structures/Comment"
-import FriendRequest from "./Structures/FriendRequest"
-import Icons from "./Structures/Icons"
-import Player from "./Structures/Player"
-import RelationshipsManager from "./Structures/Relationships"
+import Client from "./structures/client"
+import Comment from "./structures/comment"
+import FriendRequest from "./structures/FriendRequest"
+import Icons from "./structures/Icons"
+import Player from "./structures/Player"
+import RelationshipsManager from "./structures/Relationships"
 
 export default { 
     

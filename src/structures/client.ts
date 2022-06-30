@@ -1,12 +1,13 @@
 
     // [    Imports    ] \\
 
-import getUserFromID from "../Endpoints/getGJUserInfo20"
+import getUserFromID from "../endpoints/getGJUserInfo20"
 import gjRequest from "../Utils/gjRequest"
 import uuid from "../Utils/uuid"
 import params from "../Utils/params"
-import User from "./User"
+import User from "./user"
 import encryptor from '../Utils/encryptor'
+import httpClient from "../Utils/httpClient";
 import CommentManager from "./CommentManager"
 import RelationshipsManager from "./Relationships"
 

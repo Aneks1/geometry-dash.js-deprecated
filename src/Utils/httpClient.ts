@@ -1,5 +1,6 @@
 import axios from "axios";
 import params from '../Utils/params'
+import { format } from "util";
 /**
  * A class that acts as a wrapper around axios to make http stuff easier
  */
@@ -13,13 +14,20 @@ export class HttpClient {
         return new URL(`${endpoint}.php`, params.baseUrl);
     }
 
-    public async post<T>(endpoint: string, urlSearchParams? : Record<string, unknown> & { secret : string }) {
+    public async post<T extends string[]>(endpoint: string, urlSearchParams? : Record<string, string> & { secret : string }) : Promise<string[]> {
         const url = HttpClient.baseURLGenerator(endpoint);
-        try {
-            return axios.post(url.toString(), urlSearchParams).then(res => res.data as T)
-        } catch (e) {
-            throw e;
+        const data = await axios.post(url.toString(), new URLSearchParams(urlSearchParams))
+            .then( res =>
+                res.data as ( string | -1 | -2 )
+        );
+        if(data === -1) {
+            throw Error(format(`${endpoint}.php: Got -1 as response (not found). Params: `, urlSearchParams))
         }
+        if(data === -2) {
+            throw Error(format(`${endpoint}.php: Got -2 as response (empty list).`))
+        }
+        return data.split('|');
+
     }
 
     public async patch<T>(endpoint: string, data : T) {

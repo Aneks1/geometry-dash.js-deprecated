@@ -1,6 +1,6 @@
 import gjRequest from '../Utils/gjRequest'
 import params from '../Utils/params'
-import User from '../Structures/User'
+import User from '../structures/user'
 import formatResponse from "../Utils/formatResponse"
 
 async function getUserFromID({ userID }: { userID: string }) {
