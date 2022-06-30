@@ -3,17 +3,18 @@
     
 import gjRequest from "../Utils/gjRequest"
 import params from "../Utils/params"
-import Comment from '../Structures/Comment'
+import Comment from '../structures/comment'
 import formatResponse from "../Utils/formatResponse"
+    import httpClient from "../Utils/httpClient";
 
 async function getCommentsFromPlayerID({ playerID, page = "0" }: { playerID: string, page?: string }) {
 
-    const data = await gjRequest('getGJCommentHistory',
+    const data = await httpClient.post<string[]>('getGJCommentHistory',
         {
 
             secret: params.secrets.common,
             userID: playerID,
-            page: page
+            page
 
         }
     )

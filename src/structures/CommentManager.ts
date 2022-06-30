@@ -1,7 +1,7 @@
 
     // [    Imports    ] \\
 
-import Client from "./Client"
+import Client from "./client"
 import gjRequest from "../Utils/gjRequest"
 import encryptor from '../Utils/encryptor'
 import params from "../Utils/params"

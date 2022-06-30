@@ -1,12 +1,13 @@
 
     // [    Imports    ] \\
 
-import getUserFromID from "../Endpoints/getGJUserInfo20"
+import getUserFromID from "../endpoints/getGJUserInfo20"
 import gjRequest from "../Utils/gjRequest"
 import uuid from "../Utils/uuid"
 import params from "../Utils/params"
-import User from "./User"
+import User from "./user"
 import encryptor from '../Utils/encryptor'
+import httpClient from "../Utils/httpClient";
 import CommentManager from "./CommentManager"
 import RelationshipsManager from "./Relationships"
 
@@ -23,18 +24,12 @@ class Client {
 
     public async login({ username, password }: { username: string, password: string }) {
 
-        const data = await gjRequest('accounts/loginGJAccount',
-
-            { 
-
-                secret: params.secrets.account,
-                udid: uuid(),
-                userName: username,
-                password: password,
-
-            }
-        )
-
+        const data = await httpClient.post<string>('accounts/loginGJAccount', {
+            secret: params.secrets.account,
+            udid: uuid(),
+            userName: username,
+            password: password,
+        })
 
         if(data[0] == '-1')
             
