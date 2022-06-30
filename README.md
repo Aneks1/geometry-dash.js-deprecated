@@ -45,7 +45,7 @@ const friends = me.relationships.friends
 const blocked = me.relationships.blockedUsers
 ```
 
-#### Friend Requests
+### Friend Requests
 
 ```ts
 const friendRequests = me.relationships.friendRequests

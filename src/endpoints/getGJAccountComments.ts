@@ -17,8 +17,8 @@ async function getCommentsFromPlayerID({ playerID, page = "0" }: { playerID: str
 
         }
     )
-
-    if(data[0] == '-1') return '-1'
+    
+    if(data[0] ==  '-1') return '-1'
 
     let comments: Comment[] = []
 
