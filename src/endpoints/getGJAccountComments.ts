@@ -9,7 +9,7 @@ import formatResponse from "../Utils/formatResponse"
 
 async function getCommentsFromPlayerID({ playerID, page = "0" }: { playerID: string, page?: string }) {
 
-    const data = await httpClient.post<string[]>('getGJCommentHistory',
+    const data = await httpClient.post('getGJCommentHistory',
         {
 
             secret: params.secrets.common,

@@ -1,11 +1,11 @@
-import gjRequest from '../Utils/gjRequest'
 import params from '../Utils/params'
 import User from '../structures/user'
 import formatResponse from "../Utils/formatResponse"
+import httpClient from "../Utils/httpClient";
 
 async function getUserFromID({ userID }: { userID: string }) {
     
-    const data = await gjRequest('getGJUserInfo20', 
+    const data = await httpClient.post('getGJUserInfo20',
 
         {
 

@@ -5,6 +5,7 @@ import Client from "./client"
 import gjRequest from "../Utils/gjRequest"
 import encryptor from '../Utils/encryptor'
 import params from "../Utils/params"
+    import httpClient from "../Utils/httpClient";
 
 class CommentManager {
 
@@ -39,7 +40,7 @@ class CommentManager {
 
         const chk = encryptor.chk(this.client.username + commentEncrypted + levelID + percent.toString(), "0xPT6iUrtws0J", 29481)
 
-        const data = await gjRequest('uploadGJComment21',
+        const data = await httpClient.post('uploadGJComment21',
 
             {
 
@@ -70,7 +71,7 @@ class CommentManager {
 
         const commentEncrypted = encryptor.base64.encrypt(content)
 
-        const data = await gjRequest('uploadGJAccComment20',
+        const data = await httpClient.post('uploadGJAccComment20',
 
             {
 

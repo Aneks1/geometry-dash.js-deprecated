@@ -4,7 +4,7 @@ class Encryptor {
 
     public chk(str: string, salt: string, key: number) {
 
-        this.xor.encrypt(
+        return this.xor.encrypt(
             
             sha1(str + salt), key
             

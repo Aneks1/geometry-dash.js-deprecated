@@ -11,6 +11,9 @@ import httpClient from "../Utils/httpClient";
 import CommentManager from "./CommentManager"
 import RelationshipsManager from "./Relationships"
 
+
+type loginGJAccountRequest = [`${string},${string}`] | ['-1'] | ['12']
+
 class Client {
 
     public username!: string
@@ -23,8 +26,8 @@ class Client {
     public relationships!: RelationshipsManager
 
     public async login({ username, password }: { username: string, password: string }) {
-
-        const data = await httpClient.post<string[]>('accounts/loginGJAccount', {
+        //The data is "number,number", and when you split by ('|'), it turns into ["number,number"]
+        const data = await httpClient.post<loginGJAccountRequest>('accounts/loginGJAccount', {
             secret: params.secrets.account,
             udid: uuid(),
             userName: username,
@@ -46,7 +49,7 @@ class Client {
                 "This account is banned from the Geometry Dash servers! Consider not cheating again :c\n"
                 
             )
-            
+
 
         this.username = username
         this.accountID = data[0].split(',')[0]
