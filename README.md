@@ -1,6 +1,6 @@
 # ![Title](https://cdn.discordapp.com/attachments/779044709930369144/865273776866197534/Geometry_Dash2Ejs.png)
 
-Api wrapper for Geometry Dash. Made by me and my team, 100% made in TypeScript. Um, don't know what else to add. I guess i will just say that Colon is a furry.
+Api wrapper for Geometry Dash. Made by me and my team, 100% made in TypeScript.
 
 ## Installing
 
