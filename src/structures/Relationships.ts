@@ -1,13 +1,15 @@
 
     // [    Imports    ] \\
 
-import Client from "./client"
-import gjRequest from "../Utils/gjRequest"
+import Client from "./Client"
+import httpClient from "../Utils/httpClient"
 import params from "../Utils/params"
-import formatResponse from "../Utils/formatResponse";
+import formatResponse from "../Utils/formatResponse"
 import Player from './Player'
-import FriendRequest from "./FriendRequest";
-import getUserFromID from "../endpoints/getGJUserInfo20";
+import FriendRequest from "./FriendRequest"
+import getUserFromID from "../Endpoints/getGJUserInfo20"
+import BoomlinksAPIError from "./BoomlinksAPIError"
+import ErrorMessage from "../Utils/errorMessages"
 
 
 class RelationshipsManager {
@@ -20,46 +22,51 @@ class RelationshipsManager {
 
     }
 
-    public friends: Player[] = []
-    public blockedUsers: Player[] = []
+    public friends: Player[] | null = []
+    public blockedUsers: Player[] | null = []
 
-    public friendRequests: FriendRequest[] = []
+    public friendRequests: FriendRequest[] | null = []
 
 
     public async blockUser({ targetUserID }: { targetUserID: string }) {
 
-        const user = await getUserFromID({ userID: targetUserID })
-        if (user == '-1') return console.log('The user to block doesn\'t exist.')
-
-        const data = await gjRequest('getGJFriendRequests20', {
+        const requestParams = {
 
             secret: params.secrets.common,
             accountID: this.client.accountID,
             gjp: this.client.gjp,
             targetAccountID: targetUserID,
 
-        })
+        }
 
+        try {   await getUserFromID({ userID: targetUserID })   }
+        catch {   
+            
+            throw new BoomlinksAPIError(`Got response -1 (not found). ${new ErrorMessage(requestParams).errorMessages['blockGJUser20']['-1']}`, 'blockGJUser20', requestParams)
+        
+        }
+
+        await httpClient.post('getGJFriendRequests20', requestParams)
         await this.getBlockedUsers()
 
-        return this.blockedUsers
+        return this.blockedUsers![0]
 
     }
 
 
     public async getFriendRequests() {
 
-        const data = await gjRequest('getGJFriendRequests20', {
+        const data = await httpClient.post('getGJFriendRequests20', {
 
             secret: params.secrets.common,
             accountID: this.client.accountID,
             gjp: this.client.gjp,
-            getSent: 0
+            getSent: '0'
 
         })
 
-        if(data[0] == '-1') return '-1'
-        if(data[0] == '-2') return console.log(`Client "${this.client.username}" has no friend requests :(`)
+        if(data == '-2') return this.friendRequests = null
+        this.friendRequests = []
 
         for(const user of data) {
 
@@ -75,17 +82,17 @@ class RelationshipsManager {
 
     public async getBlockedUsers() {
 
-        const data = await gjRequest("getGJUserList20", {
+        const data = await httpClient.post("getGJUserList20", {
 
             accountID: this.client.accountID,
             secret: params.secrets.common,
             gjp: this.client.gjp,
-            type: 1
+            type: '1'
 
         })
 
-        if(data[0] == '-1') return '-1'
-        if(data[0] == '-2') return console.log(`Client "${this.client.username}" hasn't blocked any users.`)
+        if(data == '-2') return this.blockedUsers = null
+        this.blockedUsers = []
 
         for(const user of data) {
 
@@ -100,18 +107,17 @@ class RelationshipsManager {
 
     public async getFriends() {
 
-        const data = await gjRequest("getGJUserList20", {
+        const data = await httpClient.post("getGJUserList20", {
 
             accountID: this.client.accountID,
             secret: params.secrets.common,
             gjp: this.client.gjp,
-            type: 0
+            type: '0'
 
         })
 
-        if(data[0] == '-1') return '-1'
-        if(data[0] == '-2') return console.log(`Client "${this.client.username}" doesn't have any friends D:`)
-
+        if(data == '-2') return this.friends = null
+        this.friends = []
 
         for(const user of data) {
 

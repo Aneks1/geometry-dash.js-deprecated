@@ -1,8 +1,8 @@
 
     // [    Imports    ] \\
 
-import Client from "./client"
-import gjRequest from "../Utils/gjRequest"
+import Client from "./Client"
+import httpClient from "../Utils/httpClient"
 import encryptor from '../Utils/encryptor'
 import params from "../Utils/params"
 
@@ -26,6 +26,14 @@ class CommentManager {
                 
             )
 
+        if (content == '') 
+        
+            return console.log(
+                
+                'You can\'t send an empty comment.'
+                
+            )
+
         if(percent > 100 || percent < 0) 
         
             return console.log(
@@ -34,12 +42,22 @@ class CommentManager {
                 
             )
 
+        for(const char in content.split('')) {
+
+            if(char.charCodeAt(0) > 255) {
+
+                return console.log('A comment can just include ASCII characters.')
+
+            }
+
+        }
+
 
         const commentEncrypted = encryptor.base64.encrypt(content)
 
         const chk = encryptor.chk(this.client.username + commentEncrypted + levelID + percent.toString(), "0xPT6iUrtws0J", 29481)
 
-        const data = await gjRequest('uploadGJComment21',
+        const data = await httpClient.post('uploadGJComment21',
 
             {
 
@@ -55,10 +73,18 @@ class CommentManager {
             }
         )
 
-        return data
+        return data[0]
     }
 
     public async postProfileComment({ content }: { content: string }) {
+
+        if (content == '') 
+        
+            return console.log(
+                
+                'You can\'t send an empty comment.'
+                
+            )
 
         if (content.includes('\n')) 
         
@@ -68,9 +94,19 @@ class CommentManager {
                 
             )
 
+        for(const char in content.split('')) {
+
+            if(char.charCodeAt(0) > 255) {
+
+                return console.log('A comment can just include ASCII characters.')
+
+            }
+
+        }
+
         const commentEncrypted = encryptor.base64.encrypt(content)
 
-        const data = await gjRequest('uploadGJAccComment20',
+        const data = await httpClient.post('uploadGJAccComment20',
 
             {
 
@@ -83,7 +119,7 @@ class CommentManager {
             }
         )
 
-        return data
+        return data[0]
     }
 
 }

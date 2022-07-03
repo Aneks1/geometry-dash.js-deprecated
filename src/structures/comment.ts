@@ -17,7 +17,6 @@ class Comment {
             likes: commentInfo["4"],
             date: commentInfo["9"] + " ago",
             commentID: commentInfo["6"],
-            percent: commentInfo["10"]
 
         },
 
@@ -25,6 +24,10 @@ class Comment {
 
         this.level = commentInfo["1"]
 
+        if(commentInfo['10']) this.comment['percent'] = commentInfo["10"]
+        if(commentInfo['11']) this.comment['moderatorBadge'] = commentInfo["11"]
+        if(commentInfo['12']) this.comment['moderatorChatColor'] = commentInfo["12"]
+        
     }
 
 }

@@ -1,15 +1,14 @@
 
     // [    Imports    ] \\
     
-import gjRequest from "../Utils/gjRequest"
 import params from "../Utils/params"
-import Comment from '../structures/comment'
+import Comment from '../Structures/Comment'
 import formatResponse from "../Utils/formatResponse"
-    import httpClient from "../Utils/httpClient";
+import httpClient from "../Utils/httpClient";
 
-async function getCommentsFromPlayerID({ playerID, page = "0" }: { playerID: string, page?: string }) {
+async function getCommentsFromPlayerID({ playerID, page = "0" }: { playerID: string, page?: string }): Promise<Comment[] | null> {
 
-    const data = await httpClient.post<string[]>('getGJCommentHistory',
+    const data = await httpClient.post('getGJCommentHistory',
         {
 
             secret: params.secrets.common,
@@ -18,8 +17,8 @@ async function getCommentsFromPlayerID({ playerID, page = "0" }: { playerID: str
 
         }
     )
-    
-    if(data[0] ==  '-1') return '-1'
+
+    if(data == '-2') return null
 
     let comments: Comment[] = []
 
@@ -30,8 +29,6 @@ async function getCommentsFromPlayerID({ playerID, page = "0" }: { playerID: str
 
         let commentInfo = formatResponse(commentStructure.split('~'))
         let userInfo = formatResponse(userStructure.split('~'))
-
-        console.log(userInfo)
 
         const commentObj = new Comment(commentInfo, userInfo)
         comments.push(commentObj)

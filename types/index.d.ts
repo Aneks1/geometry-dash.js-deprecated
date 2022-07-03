@@ -6,6 +6,8 @@ export type DemonDifficulty = "easy" | "medium" | "hard" | "insane" | "extreme";
 
 export type LevelLength = "tiny" | "short" | "medium" | "long" | "xl";
 
+export type ErrorCode = "-1" | "-2" | "-12"
+
 export type UserModBadge = "none" | "mod" | "elder";
 
 export type PostedAtString = `${string} ago`;
