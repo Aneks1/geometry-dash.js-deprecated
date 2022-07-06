@@ -121,3 +121,11 @@ export interface UserSocialData {
     youtube: `https://www.youtube.com/channel/${string}` | null;
     twitter: `https://twitter.com/${string}` | null;
 }
+export type loginGJAccountRequest = [`${string},${string}`] | ['-1'] | ['12']
+
+export interface RouteMappings  {
+    getGJCommentHistory : string[];
+    getGJUserInfo20 : string[];
+    ['accounts/loginGJAccount'] : loginGJAccountRequest;
+    [key : string] : string[]
+}

@@ -12,7 +12,6 @@ import CommentManager from "./CommentManager"
 import RelationshipsManager from "./Relationships"
 
 
-type loginGJAccountRequest = [`${string},${string}`] | ['-1'] | ['12']
 
 class Client {
 
@@ -27,7 +26,7 @@ class Client {
 
     public async login({ username, password }: { username: string, password: string }) {
         //The data is "number,number", and when you split by ('|'), it turns into ["number,number"]
-        const data = await httpClient.post<loginGJAccountRequest>('accounts/loginGJAccount', {
+        const data = await httpClient.post('accounts/loginGJAccount', {
             secret: params.secrets.account,
             udid: uuid(),
             userName: username,
