@@ -2,10 +2,9 @@
     // [    Imports    ] \\
 
 import Client from "./client"
-import gjRequest from "../Utils/gjRequest"
 import encryptor from '../Utils/encryptor'
 import params from "../Utils/params"
-    import httpClient from "../Utils/httpClient";
+import httpClient from "../Utils/httpClient";
 
 class CommentManager {
 
@@ -22,9 +21,9 @@ class CommentManager {
         if (content.includes('\n')) 
         
             return console.log(
-                
+
                 'You can\' add line breaks to posts!'
-                
+
             )
 
         if(percent > 100 || percent < 0) 

@@ -21,7 +21,7 @@ class Comment {
 
         },
 
-        this.author = new Player(userInfo),
+        this.author = new Player(userInfo)
 
         this.level = commentInfo["1"]
 
