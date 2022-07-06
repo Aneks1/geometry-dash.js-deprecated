@@ -117,7 +117,7 @@ export interface UserStats {
 }
 
 export interface UserSocialData {
-    twitch: `https://twitch.tv/${string}` | null;
-    youtube: `https://youtube.com/${string}` | null;
+    twitch: `https://www.twitch.tv/${string}` | null;
+    youtube: `https://www.youtube.com/channel/${string}` | null;
     twitter: `https://twitter.com/${string}` | null;
 }

@@ -1,10 +1,11 @@
 import Icons from './Icons'
+import {UserData, UserSocialData, UserStats} from "../../types/index";
 
 class User {
 
-    public readonly info
-    public readonly stats
-    public readonly social
+    public readonly info : UserData
+    public readonly stats : UserStats
+    public readonly social : UserSocialData
     public readonly icons: Icons
 
     constructor(userInfo: Record<string, string>) {
@@ -12,15 +13,15 @@ class User {
         this.info = {
 
             username: userInfo['1'],
-            playerID: userInfo['2'],
-            accountID: userInfo['16']
+            playerId: userInfo['2'],
+            accountId: userInfo['16']
 
         },
 
         this.stats = {
 
             coins: Number(userInfo['13']),
-            usercoins: Number(userInfo['17']),
+            userCoins: Number(userInfo['17']),
             stars: Number(userInfo['3']),
             diamonds: Number(userInfo['46']),
             demons: Number(userInfo['4']),
