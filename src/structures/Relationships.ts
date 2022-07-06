@@ -8,6 +8,7 @@ import formatResponse from "../Utils/formatResponse";
 import Player from './Player'
 import FriendRequest from "./FriendRequest";
 import getUserFromID from "../endpoints/getGJUserInfo20";
+    import httpClient from "../Utils/httpClient";
 
 
 class RelationshipsManager {
@@ -31,7 +32,7 @@ class RelationshipsManager {
         const user = await getUserFromID({ userID: targetUserID })
         if (user == '-1') return console.log('The user to block doesn\'t exist.')
 
-        const data = await gjRequest('getGJFriendRequests20', {
+        const data = await httpClient.post('getGJFriendRequests20', {
 
             secret: params.secrets.common,
             accountID: this.client.accountID,
@@ -49,12 +50,12 @@ class RelationshipsManager {
 
     public async getFriendRequests() {
 
-        const data = await gjRequest('getGJFriendRequests20', {
+        const data = await httpClient.post('getGJFriendRequests20', {
 
             secret: params.secrets.common,
             accountID: this.client.accountID,
             gjp: this.client.gjp,
-            getSent: 0
+            getSent: '0'
 
         })
 
@@ -100,15 +101,14 @@ class RelationshipsManager {
 
     public async getFriends() {
 
-        const data = await gjRequest("getGJUserList20", {
+        const data = await httpClient.post("getGJUserList20", {
 
             accountID: this.client.accountID,
             secret: params.secrets.common,
             gjp: this.client.gjp,
-            type: 0
+            type: '0'
 
         })
-
         if(data[0] == '-1') return '-1'
         if(data[0] == '-2') return console.log(`Client "${this.client.username}" doesn't have any friends D:`)
 

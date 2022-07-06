@@ -1,6 +1,5 @@
 import axios from "axios";
 import params from '../Utils/params'
-import { format } from "util";
 /**
  * A class that acts as a wrapper around axios to make http stuff easier
  */
@@ -21,10 +20,10 @@ export class HttpClient {
                 res.data as ( string | -1 | -2 )
         );
         if(data === -1) {
-            throw Error(format(`${endpoint}.php: Got -1 as response (not found). Params: `, urlSearchParams))
+            return ['-1'] as T;
         }
         if(data === -2) {
-            throw Error(format(`${endpoint}.php: Got -2 as response (empty list).`))
+            return ['-2'] as T ;
         }
         return data.split('|') as T;
 
