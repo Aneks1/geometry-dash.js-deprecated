@@ -16,7 +16,7 @@ class ErrorMessage {
         
             'getGJAccountComments': {
                 
-                '-1': `Player ID "${this.params['userID']}" doesn't exist.`
+                '-1': `Couldn't get profile comments from player ID "${this.params["userID"]}". This can either mean that the player stated doesn't or that they have no comments in their profile.`
         
             },
         

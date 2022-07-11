@@ -2,7 +2,7 @@
     // [    Endpoints   ] \\
 
 import getUserFromID from "./Endpoints/getGJUserInfo20"
-import getCommentsFromPlayerID from "./Endpoints/getGJAccountComments"
+import getCommentsFromPlayerID from "./Endpoints/getGJCommentHistory"
 
     // [    Structures    ] \\
     

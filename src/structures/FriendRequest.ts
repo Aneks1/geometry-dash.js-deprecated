@@ -49,7 +49,7 @@ class FriendRequest {
 
     public async deny() {
 
-        const data = await httpClient.post('deleteGJFriendRequests20', {
+        await httpClient.post('deleteGJFriendRequests20', {
 
             secret: params.secrets.common,
             accountID: this.rsManager.client.accountID,

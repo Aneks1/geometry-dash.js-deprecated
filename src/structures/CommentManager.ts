@@ -57,7 +57,7 @@ class CommentManager {
 
         const chk = encryptor.chk(this.client.username + commentEncrypted + levelID + percent.toString(), "0xPT6iUrtws0J", 29481)
 
-        const data = await httpClient.post('uploadGJComment21',
+        await httpClient.post('uploadGJComment21',
 
             {
 
@@ -72,8 +72,6 @@ class CommentManager {
 
             }
         )
-
-        return data[0]
     }
 
     public async postProfileComment({ content }: { content: string }) {
@@ -106,8 +104,7 @@ class CommentManager {
 
         const commentEncrypted = encryptor.base64.encrypt(content)
 
-        const data = await httpClient.post('uploadGJAccComment20',
-
+        await httpClient.post('uploadGJAccComment20',
             {
 
                 secret: params.secrets.common,
@@ -118,8 +115,6 @@ class CommentManager {
                 
             }
         )
-
-        return data[0]
     }
 
 }

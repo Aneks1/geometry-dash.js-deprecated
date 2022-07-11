@@ -46,7 +46,7 @@ class RelationshipsManager {
         
         }
 
-        await httpClient.post('getGJFriendRequests20', requestParams)
+        await httpClient.post<string>('blockGJUser20', requestParams)
         await this.getBlockedUsers()
 
         return this.blockedUsers![0]
@@ -56,7 +56,7 @@ class RelationshipsManager {
 
     public async getFriendRequests() {
 
-        const data = await httpClient.post('getGJFriendRequests20', {
+        const data = await httpClient.post<string[]>('getGJFriendRequests20', {
 
             secret: params.secrets.common,
             accountID: this.client.accountID,
@@ -82,7 +82,7 @@ class RelationshipsManager {
 
     public async getBlockedUsers() {
 
-        const data = await httpClient.post("getGJUserList20", {
+        const data = await httpClient.post<string[]>("getGJUserList20", {
 
             accountID: this.client.accountID,
             secret: params.secrets.common,
@@ -107,7 +107,7 @@ class RelationshipsManager {
 
     public async getFriends() {
 
-        const data = await httpClient.post("getGJUserList20", {
+        const data = await httpClient.post<string[]>("getGJUserList20", {
 
             accountID: this.client.accountID,
             secret: params.secrets.common,

@@ -8,7 +8,7 @@ import httpClient from "../Utils/httpClient";
 
 async function getCommentsFromPlayerID({ playerID, page = "0" }: { playerID: string, page?: string }): Promise<Comment[] | null> {
 
-    const data = await httpClient.post('getGJCommentHistory',
+    const data = await httpClient.post<string[]>('getGJCommentHistory',
         {
 
             secret: params.secrets.common,
@@ -17,8 +17,6 @@ async function getCommentsFromPlayerID({ playerID, page = "0" }: { playerID: str
 
         }
     )
-
-    if(data == '-2') return null
 
     let comments: Comment[] = []
 
