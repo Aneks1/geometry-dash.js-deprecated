@@ -7,7 +7,8 @@ import getCommentsFromPlayerID from "./Endpoints/getGJCommentHistory"
     // [    Structures    ] \\
     
 import Client from "./Structures/Client"
-import Comment from "./Structures/Comment"
+import LevelComment from "./Structures/LevelComment"
+import ProfileComment from "./Structures/ProfileComment"
 import FriendRequest from "./Structures/FriendRequest"
 import Icons from "./Structures/Icons"
 import Player from "./Structures/Player"
@@ -19,11 +20,12 @@ export default {
     getUserFromID, 
     Client, 
     getCommentsFromPlayerID,
-    Comment,
+    LevelComment,
     FriendRequest,
     Icons,
     Player,
     RelationshipsManager,
-    User
+    User,
+    ProfileComment
 
 }
