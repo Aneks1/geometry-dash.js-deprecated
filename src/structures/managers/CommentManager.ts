@@ -1,10 +1,10 @@
 
     // [    Imports    ] \\
 
-import Client from "../client"
-import encryptor from '../../Utils/encryptor'
-import params from "../../Utils/params"
-import httpClient from "../../Utils/httpClient";
+import Client from "./client"
+import gjRequest from "../Utils/gjRequest"
+import encryptor from '../Utils/encryptor'
+import params from "../Utils/params"
 
 class CommentManager {
 
@@ -21,12 +21,20 @@ class CommentManager {
         if (content.includes('\n')) 
         
             return console.log(
-
+                
                 'You can\' add line breaks to posts!'
+                
+            )
+
+        if (content == '')
+
+            return console.log(
+
+                'You can\'t send an empty comment.'
 
             )
 
-        if(percent > 100 || percent < 0) 
+        if(percent > 100 || percent < 0)
         
             return console.log(
                 
@@ -34,12 +42,22 @@ class CommentManager {
                 
             )
 
+        for(const char in content.split('')) {
+
+            if(char.charCodeAt(0) > 255) {
+
+                return console.log('A comment can just include ASCII characters.')
+
+            }
+
+        }
+
 
         const commentEncrypted = encryptor.base64.encrypt(content)
 
         const chk = encryptor.chk(this.client.username + commentEncrypted + levelID + percent.toString(), "0xPT6iUrtws0J", 29481)
 
-        const data = await httpClient.post('uploadGJComment21',
+        await httpClient.post('uploadGJComment21',
 
             {
 
@@ -54,13 +72,19 @@ class CommentManager {
 
             }
         )
-
-        return data
     }
 
     public async postProfileComment({ content }: { content: string }) {
 
-        if (content.includes('\n')) 
+        if (content == '')
+
+            return console.log(
+
+                'You can\'t send an empty comment.'
+
+            )
+
+        if (content.includes('\n'))
         
             return console.log(
                 
@@ -68,10 +92,19 @@ class CommentManager {
                 
             )
 
+        for(const char in content.split('')) {
+
+            if(char.charCodeAt(0) > 255) {
+
+                return console.log('A comment can just include ASCII characters.')
+
+            }
+
+        }
+
         const commentEncrypted = encryptor.base64.encrypt(content)
 
-        const data = await httpClient.post('uploadGJAccComment20',
-
+        await httpClient.post('uploadGJAccComment20',
             {
 
                 secret: params.secrets.common,
@@ -82,8 +115,6 @@ class CommentManager {
                 
             }
         )
-
-        return data
     }
 
 }

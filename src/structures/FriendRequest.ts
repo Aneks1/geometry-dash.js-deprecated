@@ -1,6 +1,6 @@
 import Player from "./Player"
 import encryptor from "../Utils/encryptor"
-import gjRequest from "../Utils/gjRequest"
+import httpClient from "../Utils/httpClient"
 import params from "../Utils/params"
 import RelationshipsManager from "./managers/RelationshipsManager"
 
@@ -9,9 +9,9 @@ class FriendRequest {
     public readonly rsManager: RelationshipsManager
 
     public readonly user: Player
-    public readonly request: Record<string, string | number | null | boolean>
+    public readonly request: Record<string, string | boolean>
 
-    constructor(userInfo: Record<string, string | number | null>, rsManager: RelationshipsManager) {
+    constructor(userInfo: Record<string, string>, rsManager: RelationshipsManager) {
 
         this.user = new Player(userInfo)
 
@@ -30,13 +30,13 @@ class FriendRequest {
 
     public async accept() {
 
-        const data = await gjRequest('acceptGJFriendRequest20', {
+        await httpClient.post('acceptGJFriendRequest20', {
 
             secret: params.secrets.common,
             accountID: this.rsManager.client.accountID,
             gjp: this.rsManager.client.gjp,
-            targetAccountID: this.user.info.accountID,
-            requestID: this.request.id
+            targetAccountID: this.user.info.accountID as string,
+            requestID: this.request.id as string
 
         })
 
@@ -49,13 +49,13 @@ class FriendRequest {
 
     public async deny() {
 
-        const data = await gjRequest('deleteGJFriendRequests20', {
+        await httpClient.post('deleteGJFriendRequests20', {
 
             secret: params.secrets.common,
             accountID: this.rsManager.client.accountID,
             gjp: this.rsManager.client.gjp,
-            targetAccountID: this.user.info.accountID,
-            isSender: 0
+            targetAccountID: this.user.info.accountID as string,
+            isSender: '0'
 
         })
 

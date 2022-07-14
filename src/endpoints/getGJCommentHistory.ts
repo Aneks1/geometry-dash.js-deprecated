@@ -1,14 +1,14 @@
 
     // [    Imports    ] \\
-    
+
 import params from "../Utils/params"
-import Comment from '../structures/comment'
+import LevelComment from '../Structures/LevelComment'
 import formatResponse from "../Utils/formatResponse"
 import httpClient from "../Utils/httpClient";
 
-async function getCommentsFromPlayerID({ playerID, page = "0" }: { playerID: string, page?: string }) {
+async function getCommentsFromPlayerID({ playerID, page = "0" }: { playerID: string, page?: string }): Promise<LevelComment[] | null> {
 
-    const data = await httpClient.post('getGJCommentHistory',
+    const data = await httpClient.post<string[]>('getGJCommentHistory',
         {
 
             secret: params.secrets.common,
@@ -17,9 +17,8 @@ async function getCommentsFromPlayerID({ playerID, page = "0" }: { playerID: str
 
         }
     )
-    if(data[0] == '-1') return '-1'
 
-    let comments: Comment[] = []
+    let comments: LevelComment[] = []
 
     for (const comment of data) {
 
@@ -29,9 +28,7 @@ async function getCommentsFromPlayerID({ playerID, page = "0" }: { playerID: str
         let commentInfo = formatResponse(commentStructure.split('~'))
         let userInfo = formatResponse(userStructure.split('~'))
 
-        console.log(userInfo)
-
-        const commentObj = new Comment(commentInfo, userInfo)
+        const commentObj = new LevelComment(commentInfo, userInfo)
         comments.push(commentObj)
 
     }

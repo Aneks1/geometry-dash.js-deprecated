@@ -34,7 +34,7 @@ class Encryptor {
 
             return encrypted
         
-        },
+        }
 
     }
 
