@@ -125,9 +125,90 @@ export interface UserSocialData {
 }
 export type loginGJAccountRequest = [`${string},${string}`] | ['-1'] | ['12']
 
-export interface RouteMappings  {
-    getGJCommentHistory : string[];
-    getGJUserInfo20 : string[];
-    ['accounts/loginGJAccount'] : loginGJAccountRequest;
-    [key : string] : string[]
+
+export type ApiResponses =
+    | ApiAccountComment
+    | ApiUserCommentData
+    | ApiUserData
+    | ApiIconData
+
+export interface ApiAccountComment {
+    ['1'] : number; //levelId
+    ['2'] : string; //comment //encoded in base64
+    ['3'] : number; //authorPlayedId
+    ['4'] : number; //likes
+    ['5'] : number; //dislikes
+    ['6'] : number; //messageId
+    ['7'] : boolean; //spam
+    ['8'] : number; //authorAccountId
+    ['9'] : string; // age
+    ['10'] : number; // percent
+    ['11'] : number; // modBadge
+    ['12'] : string; //moderatorChatColor
 }
+
+export interface ApiUserCommentData {
+    ['1'] : string; //userName
+    ['9'] : number; //icon
+    ['10'] : number; //playerColor
+    ['11'] : number; //playerColor2
+    ['14'] : number; //iconType
+    ['15'] : 0 | 2; // glow
+    ['16'] : number;//accountID
+}
+
+export interface ApiUserData {
+    ['1'] : string; //userName
+    ['2'] : number; // 	userID
+    ['3'] : number; // stars
+    ['4'] : number; // demons
+    ['6'] : number; //ranking
+    ['7'] : number;//  	accountHighlight
+    ['8'] : number; // 	creatorpoints
+    ['9'] : number; // iconID
+    ['10'] : number; // 	playerColor
+    ['11']: number; // 	playerColor2
+    ['13']: number;//secretCoins
+    ['14']: number; // 	iconType
+    ['15']: number; // 	special
+    ['16']: number; //accountID
+    ['17']: number; // 	usercoins
+    ['18']: number; // 	messageState
+    ['19']: number; // 	friendsState
+    ['20']: `https://www.youtube.com/channel/${string}` | null // youTube
+    ['21']: number;// 	accIcon
+    ['22']: number;//accShip
+    ['23']: number;// 	accBall
+    ['24']: number; // 	accBird
+    ['25']: number; // 	accDart(wave)
+    ['26']: number; // 	accRobot
+    ['27']:number; //  	accStreak
+    ['28']: number; // 	accGlow
+    ['29']: number//  	isRegistered
+    ['30']: number; // 	globalRank
+    ['31']:number; //1	friendstate
+    ['38']:number; // messages
+    ['39']: number; // friendRequests
+    ['40']: number; //  newFriends
+    ['41']: boolean; // NewFriendRequest
+    ['42']: string; // age
+    ['43']: number; //  	accSpider
+    ['44']: `https://twitter.com/${string}` | null; //  	twitter
+    ['45']: `https://www.twitch.tv/${string}` | null;//twitch
+    ['46']: number;// diamonds
+    ['48']: number; //	accExplosion
+    ['49']: number; // 	modlevel
+    ['50']: number; // 	commentHistoryState
+}
+
+export interface ApiIconData extends Pick<ApiUserData,
+    | '10'
+    | '11'
+    | '28'
+    | '21'
+    | '22'
+    | '23'
+    | '24'
+    | '25'
+    | '26'
+    | '43'> {}
