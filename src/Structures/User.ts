@@ -15,8 +15,8 @@ class User implements Parseable<ApiUserData> {
         this.info = {
 
             username: parsedUserData['1'],
-            playerId: parsedUserData['2'] as unknown as string,
-            accountId: parsedUserData['16'] as unknown as string
+            playerId: parsedUserData['2'],
+            accountId: parsedUserData['16']
 
         };
 
@@ -39,14 +39,13 @@ class User implements Parseable<ApiUserData> {
             twitter: parsedUserData[44]
 
         };
-
         this.icons = new Icons(userInfo)
 
     }
 
-    parse(dataT: Record<string, string>): ApiUserData {
+    parse(dataT: Record<string, string>) {
         return jsonBuilder<ApiUserData>(dataT)
-            .withPreserve(['2', '16'])
+            .withPreserve('2', '16')
             .withTransform('20', value => value === '' ? null : `https://www.youtube.com/channel/${dataT[13]}`)
             .withTransform('45', value => value === '' ? null : `https://www.twitch.tv/${dataT[26]}`)
             .withTransform('44', value => value === '' ? null : `https://twitter.com/${dataT[27]}`)

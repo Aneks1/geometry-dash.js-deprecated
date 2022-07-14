@@ -11,27 +11,27 @@ class Icons implements Parseable<ApiIconData>{
 
     constructor(userInfo: Record<string, string>) {
         const parsedIconData = this.parse(userInfo);
-        this.color1 = parsedIconData['10'] as unknown as string;
-        this.color2 = userInfo['11'] as unknown as string;
+        this.color1 = parsedIconData['10'];
+        this.color2 = userInfo['11'];
 
         this.glow = parsedIconData['28'] === 1;
         
         this.gamemodes = {
 
-            cube: parsedIconData['21'] as unknown as string,
-            ship: parsedIconData['22'] as unknown as string,
-            ball: parsedIconData['23'] as unknown as string,
-            ufo: parsedIconData['24'] as unknown as string,
-            wave: parsedIconData['25'] as unknown as string,
-            robot: parsedIconData['26'] as unknown as string,
-            spider: parsedIconData['43'] as unknown as string,
+            cube: parsedIconData['21'],
+            ship: parsedIconData['22'],
+            ball: parsedIconData['23'],
+            ufo: parsedIconData['24'],
+            wave: parsedIconData['25'],
+            robot: parsedIconData['26'],
+            spider: parsedIconData['43'],
 
         }
 
     }
-    parse(dataT: Record<string, string>): ApiIconData {
+    parse(dataT: Record<string, string>) {
         return jsonBuilder<ApiIconData>(dataT)
-            .withPreserve(['10', '11', '21', '22', '23', '24', '25', '26', '43'])
+            .withPreserve('10', '11', '21', '22', '23', '24', '25', '26', '43')
             .parseRest()
             .build()
     }

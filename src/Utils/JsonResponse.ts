@@ -1,7 +1,15 @@
 import {ApiResponses} from "../../types";
 
+type Override<T1, T2> = Omit<T1, keyof T2> & T2;
+type FinalResult<
+    T extends ApiResponses,
+    Ignored extends keyof T,
+    > = Override<T, { [key in Ignored] : string }>
 
-class JsonResponseBuilder<Response extends ApiResponses> {
+class JsonResponseBuilder<
+    Response extends ApiResponses,
+    Ignored extends keyof Response = keyof Response,
+    > {
     private output : Record<string,unknown> = {} ;
     private alreadyParsed = new Set<string>();
     public constructor(
@@ -9,8 +17,8 @@ class JsonResponseBuilder<Response extends ApiResponses> {
     ) {
     }
 
-    public withTransform<K extends keyof Response>(key : K, callback: (value : string) => unknown ) :
-        JsonResponseBuilder<Response> {
+    public withTransform<K extends keyof Response>(key : K, callback: (value : string) => Response[K] ) :
+        JsonResponseBuilder<Response, Ignored> {
         this.output[key as string] = callback(this.dictionary[key.toString()]);
         this.alreadyParsed.add(key.toString())
         return this;
@@ -19,20 +27,25 @@ class JsonResponseBuilder<Response extends ApiResponses> {
     /**
      *
      * @param keys the keys you want to keep from being parsed
-     *  Note : As the builder parses to one type, if accessing this preserved key,
-     *  you will need to cast it as string
+     *  Note : This makes the keys provided their values as string
      */
-    public withPreserve<K extends keyof Response>(keys : K[]) {
+    public withPreserve<K extends (keyof Response)[]>(...keys : [...K])
+        : JsonResponseBuilder<Response, Extract<Ignored, K[number]>> {
         for(const key of keys) {
             if(this.alreadyParsed.has(key.toString())) {
                 throw Error("this key has already been parsed")
             }
-            this.output[key as string] = this.dictionary[key];
+            this.output[key.toString()] = this.dictionary[key];
             this.alreadyParsed.add(key.toString());
         }
-        return this;
+        return this as unknown as JsonResponseBuilder<Response, Extract<Ignored, K[number]>>;
     }
-    public parseRest(): JsonResponseBuilder<Response> {
+
+    /**
+     * All numeric strings, boolean strings, empty strings are converted into numbers, booleans, null unless .withPreserve(keys) is called before hand.
+     *
+     */
+    public parseRest(): JsonResponseBuilder<Response, Ignored> {
         const keysNeededToParse = Object.keys(this.dictionary).filter(key => !this.alreadyParsed.has(key));
         for(const key of keysNeededToParse) {
             const value: string = this.dictionary[key];
@@ -58,8 +71,8 @@ class JsonResponseBuilder<Response extends ApiResponses> {
         return this;
     }
 
-    public build() : Response {
-        return this.output as Response;
+    public build()  {
+        return this.output as FinalResult<Response, Ignored>;
     }
 
 }
