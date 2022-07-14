@@ -1,14 +1,14 @@
 
     // [    Imports    ] \\
 
-import Client from "./client"
-import gjRequest from "../Utils/gjRequest"
-import params from "../Utils/params"
-import formatResponse from "../Utils/formatResponse";
-import Player from './Player'
-import FriendRequest from "./FriendRequest";
-import getUserFromID from "../endpoints/getGJUserInfo20";
-    import httpClient from "../Utils/httpClient";
+import Client from "../client"
+import gjRequest from "../../Utils/gjRequest"
+import params from "../../Utils/params"
+import formatResponse from "../../Utils/formatResponse";
+import Player from '../Player'
+import FriendRequest from "../FriendRequest";
+import getUserFromID from "../../endpoints/getGJUserInfo20";
+    import httpClient from "../../Utils/httpClient";
 
 
 class RelationshipsManager {

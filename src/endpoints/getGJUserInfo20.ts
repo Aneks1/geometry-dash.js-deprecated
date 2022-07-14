@@ -2,7 +2,6 @@ import params from '../Utils/params'
 import User from '../structures/user'
 import formatResponse from "../Utils/formatResponse"
 import httpClient from "../Utils/httpClient";
-
 async function getUserFromID({ userID }: { userID: string }) {
     
     const data = await httpClient.post('getGJUserInfo20',
@@ -14,7 +13,6 @@ async function getUserFromID({ userID }: { userID: string }) {
 
         }
     )
-    
     if(data[0] == '-1') return '-1'
 
     const userInfo = formatResponse(data[0].split(":"))

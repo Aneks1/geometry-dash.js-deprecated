@@ -1,11 +1,10 @@
 
     // [    Imports    ] \\
     
-import gjRequest from "../Utils/gjRequest"
 import params from "../Utils/params"
 import Comment from '../structures/comment'
 import formatResponse from "../Utils/formatResponse"
-    import httpClient from "../Utils/httpClient";
+import httpClient from "../Utils/httpClient";
 
 async function getCommentsFromPlayerID({ playerID, page = "0" }: { playerID: string, page?: string }) {
 
@@ -18,7 +17,6 @@ async function getCommentsFromPlayerID({ playerID, page = "0" }: { playerID: str
 
         }
     )
-
     if(data[0] == '-1') return '-1'
 
     let comments: Comment[] = []

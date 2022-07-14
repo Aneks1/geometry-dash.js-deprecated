@@ -1,6 +1,7 @@
 import Player from './Player'
 import encryptor from '../Utils/encryptor'
-
+import jsonResponse from '../Utils/JsonResponse';
+import {LevelComment} from "../../types";
 
 class Comment {
 
@@ -10,7 +11,6 @@ class Comment {
 
 
     constructor(commentInfo: Record<string, string>, userInfo: Record<string, string>) {
-
         this.comment = {
 
             content: encryptor.base64.decrypt(commentInfo["2"]),

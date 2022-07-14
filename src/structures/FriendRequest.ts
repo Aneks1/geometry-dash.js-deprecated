@@ -2,7 +2,7 @@ import Player from "./Player"
 import encryptor from "../Utils/encryptor"
 import gjRequest from "../Utils/gjRequest"
 import params from "../Utils/params"
-import RelationshipsManager from "./Relationships"
+import RelationshipsManager from "./managers/RelationshipsManager"
 
 class FriendRequest {
 

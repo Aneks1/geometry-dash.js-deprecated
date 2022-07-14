@@ -15,8 +15,8 @@ export class HttpClient {
     }
 
     public async post<T extends keyof RouteMappings>(endpoint: T, urlSearchParams? : Record<string, string> & { secret : string }) : Promise<RouteMappings[T]> {
-        const url = HttpClient.baseURLGenerator(endpoint as string); // weird bug where not casting it would give error :
-        // Argument of type 'keyof RouteMappings' is not assignable to parameter of type 'string'.   Type 'number' is not assignable to type 'string'
+        const url = HttpClient.baseURLGenerator(endpoint.toString()); // weird bug where not casting it would give error :
+        // Argument of type 'keyof RouteMappings' is not assignable to parameter of type 'string'. Type 'number' is not assignable to type 'string'
         const data = await axios.post(url.toString(), new URLSearchParams(urlSearchParams))
             .then( res =>
                 res.data as ( string | -1 | -2 )

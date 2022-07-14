@@ -11,7 +11,7 @@ import Comment from "./structures/comment"
 import FriendRequest from "./structures/FriendRequest"
 import Icons from "./structures/Icons"
 import Player from "./structures/Player"
-import RelationshipsManager from "./structures/Relationships"
+import RelationshipsManager from "./structures/managers/RelationshipsManager"
 
 export default { 
     
