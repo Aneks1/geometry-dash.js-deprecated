@@ -7,8 +7,8 @@ import params from "../Utils/params"
 import User from "./User"
 import encryptor from '../Utils/encryptor'
 import httpClient from "../Utils/httpClient";
-import CommentManager from "./CommentManager"
-import RelationshipsManager from "./Relationships"
+import CommentManager from "./managers/CommentManager"
+import RelationshipsManager from "./managers/RelationshipsManager"
 
 class Client {
 

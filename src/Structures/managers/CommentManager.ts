@@ -1,10 +1,10 @@
 
     // [    Imports    ] \\
 
-import Client from "./client"
-import gjRequest from "../Utils/gjRequest"
-import encryptor from '../Utils/encryptor'
-import params from "../Utils/params"
+import Client from "../Client"
+import encryptor from '../../Utils/encryptor'
+import params from "../../Utils/params"
+    import httpClient from "../../Utils/httpClient";
 
 class CommentManager {
 

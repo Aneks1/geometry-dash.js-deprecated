@@ -12,7 +12,7 @@ import ProfileComment from "./Structures/ProfileComment"
 import FriendRequest from "./Structures/FriendRequest"
 import Icons from "./Structures/Icons"
 import Player from "./Structures/Player"
-import RelationshipsManager from "./Structures/Relationships"
+import RelationshipsManager from "./Structures/managers/RelationshipsManager"
 import User from "./Structures/User"
 
 export default { 
@@ -27,10 +27,9 @@ export default {
     RelationshipsManager,
     User,
     ProfileComment
+}
 
     const me = new Client();
     me.login({ username: 'Tofixts', password: 'sussus' }).then(c => {
-        if(c instanceof Client) {
             console.log(c.profile)
-        }
     })
