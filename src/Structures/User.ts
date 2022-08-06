@@ -3,7 +3,7 @@ import {ApiUserData, UserData, UserSocialData, UserStats} from "../../types/inde
 import Parseable from "./contracts/parseable";
 import jsonBuilder from "../Utils/JsonResponse";
 
-class User implements Parseable<ApiUserData> {
+class User implements Parseable {
 
     public readonly info : UserData
     public readonly stats : UserStats

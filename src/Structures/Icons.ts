@@ -2,7 +2,7 @@ import Parseable from "./contracts/parseable";
 import jsonBuilder from "../Utils/JsonResponse";
 import {ApiIconData} from "../../types";
 
-class Icons implements Parseable<ApiIconData>{
+class Icons implements Parseable {
 
     public readonly color1: string
     public readonly color2: string
