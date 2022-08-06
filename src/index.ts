@@ -22,14 +22,9 @@ export default {
     getCommentsFromPlayerID,
     LevelComment,
     FriendRequest,
-    Icons,
+    Icons, // 
     Player,
     RelationshipsManager,
     User,
     ProfileComment
 }
-
-    const me = new Client();
-    me.login({ username: 'Tofixts', password: 'sussus' }).then(c => {
-            console.log(c.profile)
-    })

@@ -184,7 +184,7 @@ export interface ApiUserData {
     ['26']: number; // 	accRobot
     ['27']:number; //  	accStreak
     ['28']: number; // 	accGlow
-    ['29']: number//  	isRegistered
+    ['29']: number; //  isRegistered
     ['30']: number; // 	globalRank
     ['31']:number; //1	friendstate
     ['38']:number; // messages

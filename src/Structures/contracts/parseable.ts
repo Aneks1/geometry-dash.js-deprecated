@@ -1,5 +1,7 @@
 
 
-export default interface Parseable<T> {
+export default interface Parseable {
+
     parse(dataT: Record<string, string>) : unknown
+
 }
