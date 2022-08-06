@@ -12,7 +12,7 @@ import ProfileComment from "./Structures/ProfileComment"
 import FriendRequest from "./Structures/FriendRequest"
 import Icons from "./Structures/Icons"
 import Player from "./Structures/Player"
-import RelationshipsManager from "./Structures/Relationships"
+import RelationshipsManager from "./Structures/managers/RelationshipsManager"
 import User from "./Structures/User"
 
 export default { 
@@ -22,10 +22,9 @@ export default {
     getCommentsFromPlayerID,
     LevelComment,
     FriendRequest,
-    Icons,
+    Icons, // 
     Player,
     RelationshipsManager,
     User,
     ProfileComment
-
 }

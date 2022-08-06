@@ -1,10 +1,10 @@
 
     // [    Imports    ] \\
 
-import Client from "./Client"
-import httpClient from "../Utils/httpClient"
-import encryptor from '../Utils/encryptor'
-import params from "../Utils/params"
+import Client from "../Client"
+import encryptor from '../../Utils/encryptor'
+import params from "../../Utils/params"
+    import httpClient from "../../Utils/httpClient";
 
 class CommentManager {
 
@@ -26,15 +26,15 @@ class CommentManager {
                 
             )
 
-        if (content == '') 
-        
+        if (content == '')
+
             return console.log(
-                
+
                 'You can\'t send an empty comment.'
-                
+
             )
 
-        if(percent > 100 || percent < 0) 
+        if(percent > 100 || percent < 0)
         
             return console.log(
                 
@@ -76,15 +76,15 @@ class CommentManager {
 
     public async postProfileComment({ content }: { content: string }) {
 
-        if (content == '') 
-        
+        if (content == '')
+
             return console.log(
-                
+
                 'You can\'t send an empty comment.'
-                
+
             )
 
-        if (content.includes('\n')) 
+        if (content.includes('\n'))
         
             return console.log(
                 

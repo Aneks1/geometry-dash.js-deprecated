@@ -6,7 +6,7 @@ class ProfileComment {
 
     public readonly comment: Record<string, string>
     public readonly author: Player
-
+    public readonly level: string
 
     constructor(commentInfo: Record<string, string>, userInfo: Record<string, string>) {
 
@@ -17,10 +17,12 @@ class ProfileComment {
             date: commentInfo["9"] + " ago",
             commentID: commentInfo["6"],
 
-        },
+        };
 
-        this.author = new Player(userInfo)
-        
+        this.author = new Player(userInfo);
+
+        this.level = commentInfo["1"]
+
     }
 
 }

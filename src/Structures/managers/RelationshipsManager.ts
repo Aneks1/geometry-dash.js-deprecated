@@ -1,15 +1,15 @@
 
     // [    Imports    ] \\
 
-import Client from "./Client"
-import httpClient from "../Utils/httpClient"
-import params from "../Utils/params"
-import formatResponse from "../Utils/formatResponse"
-import Player from './Player'
-import FriendRequest from "./FriendRequest"
-import getUserFromID from "../Endpoints/getGJUserInfo20"
-import BoomlinksAPIError from "./BoomlinksAPIError"
-import ErrorMessage from "../Utils/errorMessages"
+import Client from "../Client"
+import httpClient from "../../Utils/httpClient"
+import params from "../../Utils/params"
+import formatResponse from "../../Utils/formatResponse"
+import Player from '../Player'
+import FriendRequest from "../FriendRequest"
+import getUserFromID from "../../Endpoints/getGJUserInfo20"
+import BoomlinksAPIError from "./../BoomlinksAPIError"
+import ErrorMessage from "../../Utils/errorMessages"
 
 
 class RelationshipsManager {
@@ -40,10 +40,10 @@ class RelationshipsManager {
         }
 
         try {   await getUserFromID({ userID: targetUserID })   }
-        catch {   
-            
+        catch {
+
             throw new BoomlinksAPIError(`Got response -1 (not found). ${new ErrorMessage(requestParams).errorMessages['blockGJUser20']['-1']}`, 'blockGJUser20', requestParams)
-        
+
         }
 
         await httpClient.post<string>('blockGJUser20', requestParams)

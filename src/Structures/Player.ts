@@ -14,7 +14,7 @@ class Player {
             username: userInfo['1'],
             accountID: userInfo['16']
 
-        },
+        };
 
         this.icons = {
 

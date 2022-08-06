@@ -7,8 +7,8 @@ import params from "../Utils/params"
 import User from "./User"
 import encryptor from '../Utils/encryptor'
 import httpClient from "../Utils/httpClient";
-import CommentManager from "./CommentManager"
-import RelationshipsManager from "./Relationships"
+import CommentManager from "./managers/CommentManager"
+import RelationshipsManager from "./managers/RelationshipsManager"
 
 class Client {
 
@@ -23,14 +23,13 @@ class Client {
 
     public async login({ username, password }: { username: string, password: string }) {
 
-        const data = await httpClient.post('accounts/loginGJAccount', {
-
+        const data = await httpClient.post<string[]>('accounts/loginGJAccount', {
             secret: params.secrets.account,
             udid: uuid(),
             userName: username,
             password: password,
 
-        })            
+        })
 
         this.username = username
         this.accountID = data[0].split(',')[0]

@@ -5,7 +5,7 @@ import formatResponse from "../Utils/formatResponse"
 
 async function getUserFromID({ userID }: { userID: string }): Promise<User | null> {
     
-    const data = await httpClient.post('getGJUserInfo20', 
+    const data = await httpClient.post('getGJUserInfo20',
         {
 
             secret: params.secrets.common, 
@@ -15,7 +15,7 @@ async function getUserFromID({ userID }: { userID: string }): Promise<User | nul
     )
     
     if(data == '-1') {
-        
+
         console.log(':D')
         return null
 
